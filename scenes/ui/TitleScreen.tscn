@@ -1,0 +1,103 @@
+[gd_scene load_steps=2 format=3 uid="uid://title_screen"]
+
+[ext_resource type="Script" path="res://scripts/ui/TitleScreen.gd" id="1_titlescr"]
+
+[node name="TitleScreen" type="Control"]
+layout_mode = 3
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+script = ExtResource("1_titlescr")
+
+[node name="Background" type="ColorRect" parent="."]
+layout_mode = 1
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+color = Color(0.04, 0.04, 0.08, 1)
+
+[node name="VBoxContainer" type="VBoxContainer" parent="."]
+layout_mode = 1
+anchors_preset = 8
+anchor_left = 0.5
+anchor_top = 0.5
+anchor_right = 0.5
+anchor_bottom = 0.5
+offset_left = -300.0
+offset_top = -240.0
+offset_right = 300.0
+offset_bottom = 240.0
+grow_horizontal = 2
+grow_vertical = 2
+theme_override_constants/separation = 24
+
+[node name="TitleLabel" type="Label" parent="VBoxContainer"]
+layout_mode = 2
+text = "VATBREAK"
+horizontal_alignment = 1
+theme_override_font_sizes/font_size = 72
+theme_override_colors/font_color = Color(0.2, 1.0, 0.4, 1)
+
+[node name="SubtitleLabel" type="Label" parent="VBoxContainer"]
+layout_mode = 2
+text = "ZooCorps™ Containment Response"
+horizontal_alignment = 1
+theme_override_font_sizes/font_size = 18
+theme_override_colors/font_color = Color(0.5, 0.8, 0.6, 1)
+
+[node name="Spacer1" type="Control" parent="VBoxContainer"]
+layout_mode = 2
+custom_minimum_size = Vector2(0, 16)
+
+[node name="PlotLabel" type="RichTextLabel" parent="VBoxContainer"]
+layout_mode = 2
+custom_minimum_size = Vector2(600, 120)
+size_flags_horizontal = 4
+bbcode_enabled = true
+text = "[center]A buffer overflow in the central breeding controller has triggered an uninterrupted reproductive loop across every vat in the facility. The enclosures have overflowed. The aliens are loose.\n\nYou are a ZooCorps containment officer armed with the [color=lime]MP-35 Empee[/color] nano-rifle — a direct descendant of CDF adaptive weapon technology. Find the breached enclosures. Destroy the vats. Stop the bloom.[/center]"
+theme_override_font_sizes/normal_font_size = 14
+theme_override_colors/default_color = Color(0.8, 0.85, 0.8, 1)
+
+[node name="Spacer2" type="Control" parent="VBoxContainer"]
+layout_mode = 2
+custom_minimum_size = Vector2(0, 8)
+
+[node name="ControlsLabel" type="Label" parent="VBoxContainer"]
+layout_mode = 2
+text = "WASD — Move     Mouse — Aim     LMB — Fire     Scroll — Switch Mode     MMB — Quick Swap"
+horizontal_alignment = 1
+theme_override_font_sizes/font_size = 12
+theme_override_colors/font_color = Color(0.5, 0.6, 0.55, 1)
+
+[node name="Spacer3" type="Control" parent="VBoxContainer"]
+layout_mode = 2
+custom_minimum_size = Vector2(0, 20)
+
+[node name="StartButton" type="Button" parent="VBoxContainer"]
+layout_mode = 2
+size_flags_horizontal = 4
+custom_minimum_size = Vector2(260, 52)
+text = "DEPLOY"
+theme_override_font_sizes/font_size = 22
+theme_override_colors/font_color = Color(0.05, 0.05, 0.05, 1)
+theme_override_colors/font_hover_color = Color(0.05, 0.05, 0.05, 1)
+theme_override_colors/font_pressed_color = Color(0.05, 0.05, 0.05, 1)
+theme_override_colors/font_focus_color = Color(0.05, 0.05, 0.05, 1)
+
+[node name="Spacer4" type="Control" parent="VBoxContainer"]
+layout_mode = 2
+custom_minimum_size = Vector2(0, 16)
+
+[node name="QuoteLabel" type="Label" parent="VBoxContainer"]
+layout_mode = 2
+text = "\"The vats are blooming.\"\n— ZooCorps Emergency Broadcast, timestamp corrupted"
+horizontal_alignment = 1
+theme_override_font_sizes/font_size = 11
+theme_override_colors/font_color = Color(0.35, 0.45, 0.4, 1)
+
+[node name="JamLabel" type="Label" parent="VBoxContainer"]
+layout_mode = 2
+text = "TINS 2026  ·  Old Man's War universe by John Scalzi"
+horizontal_alignment = 1
+theme_override_font_sizes/font_size = 10
+theme_override_colors/font_color = Color(0.28, 0.32, 0.30, 1)

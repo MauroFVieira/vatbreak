@@ -1,0 +1,25 @@
+[gd_scene format=3 uid="uid://chvejqp6b4xrb"]
+
+[ext_resource type="Script" uid="uid://c2sh4i0eq76o" path="res://scripts/enemies/ConsuCrawler.gd" id="1_consu"]
+[ext_resource type="Texture2D" uid="uid://112kl1q2gts4" path="res://sprites/playerGrey_stand.png" id="2_wl10v"]
+
+[sub_resource type="CircleShape2D" id="CircleShape2D_1"]
+
+[node name="ConsuCrawler" type="CharacterBody2D" unique_id=1442346828]
+collision_layer = 2
+script = ExtResource("1_consu")
+
+[node name="Sprite2D" type="Sprite2D" parent="." unique_id=139973571]
+modulate = Color(0.2, 0.9, 0.5, 1)
+texture = ExtResource("2_wl10v")
+
+[node name="CollisionShape2D" type="CollisionShape2D" parent="." unique_id=239248527]
+shape = SubResource("CircleShape2D_1")
+
+[node name="ContactArea" type="Area2D" parent="." unique_id=1256189109]
+collision_layer = 0
+
+[node name="ContactShape" type="CollisionShape2D" parent="ContactArea" unique_id=567918190]
+shape = SubResource("CircleShape2D_1")
+
+[connection signal="body_entered" from="ContactArea" to="." method="_on_body_entered"]

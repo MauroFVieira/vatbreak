@@ -1,0 +1,17 @@
+[gd_scene load_steps=5 format=3 uid="uid://mp35"]
+
+[ext_resource type="Script" path="res://scripts/weapons/MP35.gd" id="1_mp35"]
+[ext_resource type="PackedScene" path="res://scenes/projectiles/BulletProjectile.tscn" id="2_bullet"]
+[ext_resource type="PackedScene" path="res://scenes/projectiles/GrenadeProjectile.tscn" id="3_grenade"]
+[ext_resource type="PackedScene" path="res://scenes/projectiles/BeamProjectile.tscn" id="4_beam"]
+
+[node name="MP35" type="Node2D"]
+script = ExtResource("1_mp35")
+groups = ["mp35"]
+bullet_scene = ExtResource("2_bullet")
+grenade_scene = ExtResource("3_grenade")
+beam_scene = ExtResource("4_beam")
+
+[node name="Sprite2D" type="Sprite2D" parent="."]
+modulate = Color(0.7, 0.7, 0.9, 1)
+; Placeholder rectangle — replace with pixel art sprite

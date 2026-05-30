@@ -1,0 +1,28 @@
+[gd_scene format=3 uid="uid://canq6y3666s0d"]
+
+[ext_resource type="Script" uid="uid://bfv5wtlmr5iy1" path="res://scripts/enemies/RraeyBrute.gd" id="1_rraey"]
+[ext_resource type="Texture2D" uid="uid://b26k2vibkq3ff" path="res://sprites/enemyWalking_1.png" id="2_cxatu"]
+
+[sub_resource type="CapsuleShape2D" id="CapsuleShape2D_1"]
+radius = 16.0
+height = 36.0
+
+[node name="RraeyBrute" type="CharacterBody2D" unique_id=1026688411]
+collision_layer = 2
+script = ExtResource("1_rraey")
+
+[node name="Sprite2D" type="Sprite2D" parent="." unique_id=260484414]
+modulate = Color(0.8, 0.2, 0.15, 1)
+scale = Vector2(1.8, 1.8)
+texture = ExtResource("2_cxatu")
+
+[node name="CollisionShape2D" type="CollisionShape2D" parent="." unique_id=117597613]
+shape = SubResource("CapsuleShape2D_1")
+
+[node name="ContactArea" type="Area2D" parent="." unique_id=1130940051]
+collision_layer = 0
+
+[node name="ContactShape" type="CollisionShape2D" parent="ContactArea" unique_id=1588281761]
+shape = SubResource("CapsuleShape2D_1")
+
+[connection signal="body_entered" from="ContactArea" to="." method="_on_body_entered"]

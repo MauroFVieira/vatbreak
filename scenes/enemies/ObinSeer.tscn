@@ -1,0 +1,30 @@
+[gd_scene format=3 uid="uid://vk5lgup2ccoi"]
+
+[ext_resource type="Script" uid="uid://i0mjyi0tp1qr" path="res://scripts/enemies/ObinSeer.gd" id="1_obin"]
+[ext_resource type="PackedScene" uid="uid://chvejqp6b4xrb" path="res://scenes/enemies/ConsuCrawler.tscn" id="2_add"]
+[ext_resource type="Texture2D" uid="uid://d410jbyard71" path="res://sprites/playerBlue_stand.png" id="3_wh61j"]
+
+[sub_resource type="CapsuleShape2D" id="CapsuleShape2D_1"]
+radius = 12.0
+height = 28.0
+
+[node name="ObinSeer" type="CharacterBody2D" unique_id=848383022]
+collision_layer = 2
+script = ExtResource("1_obin")
+add_scene = ExtResource("2_add")
+
+[node name="Sprite2D" type="Sprite2D" parent="." unique_id=644821732]
+modulate = Color(0.6, 0.2, 0.9, 1)
+scale = Vector2(1.2, 2)
+texture = ExtResource("3_wh61j")
+
+[node name="CollisionShape2D" type="CollisionShape2D" parent="." unique_id=1056683253]
+shape = SubResource("CapsuleShape2D_1")
+
+[node name="ContactArea" type="Area2D" parent="." unique_id=1602917885]
+collision_layer = 0
+
+[node name="ContactShape" type="CollisionShape2D" parent="ContactArea" unique_id=351475411]
+shape = SubResource("CapsuleShape2D_1")
+
+[connection signal="body_entered" from="ContactArea" to="." method="_on_body_entered"]

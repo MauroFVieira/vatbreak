@@ -1,0 +1,29 @@
+[gd_scene format=3 uid="uid://b0dy05jvmblps"]
+
+[ext_resource type="Script" uid="uid://ccb3f3hej6liv" path="res://scripts/enemies/FnituDrifter.gd" id="1_fnitu"]
+[ext_resource type="PackedScene" path="res://scenes/projectiles/AcidGlobProjectile.tscn" id="2_glob"]
+[ext_resource type="Texture2D" uid="uid://i0vn8n3y5qcu" path="res://sprites/playerRed_stand.png" id="3_1572l"]
+
+[sub_resource type="CircleShape2D" id="CircleShape2D_1"]
+radius = 13.0
+
+[node name="FnituDrifter" type="CharacterBody2D" unique_id=1137921184]
+collision_layer = 2
+script = ExtResource("1_fnitu")
+acid_glob_scene = ExtResource("2_glob")
+
+[node name="Sprite2D" type="Sprite2D" parent="." unique_id=51007943]
+modulate = Color(0.7553701, 0.31348056, 0.2669726, 1)
+scale = Vector2(1.3, 0.8)
+texture = ExtResource("3_1572l")
+
+[node name="CollisionShape2D" type="CollisionShape2D" parent="." unique_id=1129076173]
+shape = SubResource("CircleShape2D_1")
+
+[node name="ContactArea" type="Area2D" parent="." unique_id=723962168]
+collision_layer = 0
+
+[node name="ContactShape" type="CollisionShape2D" parent="ContactArea" unique_id=1958609655]
+shape = SubResource("CircleShape2D_1")
+
+[connection signal="body_entered" from="ContactArea" to="." method="_on_body_entered"]

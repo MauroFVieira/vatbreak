@@ -1,0 +1,18 @@
+[gd_scene load_steps=2 format=3 uid="uid://beam_proj"]
+
+[ext_resource type="Script" path="res://scripts/projectiles/BeamProjectile.gd" id="1_beam"]
+
+[node name="BeamProjectile" type="Node2D"]
+script = ExtResource("1_beam")
+
+[node name="RayCast2D" type="RayCast2D" parent="."]
+target_position = Vector2(500, 0)
+collision_mask = 6
+
+[node name="Line2D" type="Line2D" parent="."]
+default_color = Color(0.3, 0.8, 1.0, 0.85)
+width = 3.0
+
+[node name="TickTimer" type="Timer" parent="."]
+wait_time = 0.1
+autostart = true

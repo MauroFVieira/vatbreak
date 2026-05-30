@@ -1,0 +1,19 @@
+[gd_scene format=3 uid="uid://cu1tq7kdu5w8g"]
+
+[ext_resource type="Script" uid="uid://b2fkq2nvi3rhh" path="res://scripts/projectiles/AcidGlobProjectile.gd" id="1_acid"]
+[ext_resource type="Texture2D" uid="uid://cotfm74xgj7cg" path="res://sprites/acidGlob.png" id="2_v8ax6"]
+
+[sub_resource type="CircleShape2D" id="CircleShape2D_1"]
+radius = 6.0
+
+[node name="AcidGlobProjectile" type="Area2D" unique_id=1131261184]
+collision_layer = 8
+script = ExtResource("1_acid")
+
+[node name="Sprite2D" type="Sprite2D" parent="." unique_id=520710552]
+modulate = Color(0.3, 0.9, 0.1, 0.9)
+scale = Vector2(1.2, 1.2)
+texture = ExtResource("2_v8ax6")
+
+[node name="CollisionShape2D" type="CollisionShape2D" parent="." unique_id=1834746981]
+shape = SubResource("CircleShape2D_1")

@@ -1,0 +1,124 @@
+extends Node2D
+
+# ──────────────────────────────────────────────
+#  MP35.gd  —  The "Empee" nano-rifle
+#  Three ammo modes: BULLET / GRENADE / BEAM
+# ──────────────────────────────────────────────
+
+enum AmmoMode { BULLET, GRENADE, BEAM }
+
+const MODE_NAMES := ["BULLET", "GRENADE", "BEAM"]
+const MODE_COUNT := 3
+
+@export var bullet_scene: PackedScene
+@export var grenade_scene: PackedScene
+@export var beam_scene: PackedScene   # instantiated once, parented to scene tree
+
+# Bullet mode
+const BULLET_COOLDOWN := 0.10   # seconds between shots
+const BULLET_DAMAGE   := 12
+const BULLET_SPEED    := 800.0
+
+# Grenade mode
+const GRENADE_COOLDOWN := 0.60
+const GRENADE_DAMAGE   := 80
+const GRENADE_SPEED    := 280.0
+const GRENADE_RADIUS   := 96.0
+
+# Beam mode — handled by BeamProjectile child
+const BEAM_TICK_DAMAGE := 4      # per 0.1 s tick
+const BEAM_RANGE       := 500.0
+
+var current_mode: AmmoMode = AmmoMode.BULLET
+var last_mode:    AmmoMode = AmmoMode.GRENADE
+
+var _fire_cooldown: float = 0.0
+var _beam_instance = null   # active beam node
+
+signal mode_changed(mode_name: String)
+
+
+func _ready() -> void:
+	emit_signal("mode_changed", MODE_NAMES[current_mode])
+
+
+func _process(delta: float) -> void:
+	_fire_cooldown = maxf(_fire_cooldown - delta, 0.0)
+	_handle_mode_switch()
+	_handle_fire()
+
+
+func _handle_mode_switch() -> void:
+	if Input.is_action_just_pressed("cycle_mode_next"):
+		_set_mode((current_mode + 1) % MODE_COUNT)
+	elif Input.is_action_just_pressed("cycle_mode_prev"):
+		_set_mode((current_mode - 1 + MODE_COUNT) % MODE_COUNT)
+	elif Input.is_action_just_pressed("quick_swap"):
+		var tmp := current_mode
+		_set_mode(last_mode)
+		last_mode = tmp
+
+
+func _set_mode(new_mode: int) -> void:
+	if new_mode == current_mode:
+		return
+	last_mode = current_mode
+	current_mode = new_mode as AmmoMode
+	_stop_beam()
+	emit_signal("mode_changed", MODE_NAMES[current_mode])
+
+
+func _handle_fire() -> void:
+	match current_mode:
+		AmmoMode.BULLET:
+			_stop_beam()
+			if Input.is_action_pressed("fire") and _fire_cooldown <= 0.0:
+				_fire_bullet()
+		AmmoMode.GRENADE:
+			_stop_beam()
+			if Input.is_action_just_pressed("fire") and _fire_cooldown <= 0.0:
+				_fire_grenade()
+		AmmoMode.BEAM:
+			if Input.is_action_pressed("fire"):
+				_start_beam()
+			else:
+				_stop_beam()
+
+
+func _fire_bullet() -> void:
+	if not bullet_scene:
+		return
+	_fire_cooldown = BULLET_COOLDOWN
+	var proj = bullet_scene.instantiate()
+	get_tree().current_scene.add_child(proj)
+	proj.global_position = global_position
+	proj.direction = Vector2.RIGHT.rotated(global_rotation)
+	proj.speed = BULLET_SPEED
+	proj.damage = BULLET_DAMAGE
+
+
+func _fire_grenade() -> void:
+	if not grenade_scene:
+		return
+	_fire_cooldown = GRENADE_COOLDOWN
+	var proj = grenade_scene.instantiate()
+	get_tree().current_scene.add_child(proj)
+	proj.global_position = global_position
+	proj.direction = Vector2.RIGHT.rotated(global_rotation)
+	proj.speed = GRENADE_SPEED
+	proj.damage = GRENADE_DAMAGE
+	proj.explosion_radius = GRENADE_RADIUS
+
+
+func _start_beam() -> void:
+	if _beam_instance == null and beam_scene:
+		_beam_instance = beam_scene.instantiate()
+		add_child(_beam_instance)
+		_beam_instance.tick_damage = BEAM_TICK_DAMAGE
+		_beam_instance.beam_range  = BEAM_RANGE
+
+
+func _stop_beam() -> void:
+	if _beam_instance != null:
+		_beam_instance.queue_free()
+		_beam_instance = null

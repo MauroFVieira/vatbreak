@@ -34,6 +34,8 @@ var last_mode:    AmmoMode = AmmoMode.GRENADE
 
 var _fire_cooldown: float = 0.0
 var _beam_instance = null   # active beam node
+var _prev_left_pressed: bool = false
+var _prev_right_pressed: bool = false
 
 signal mode_changed(mode_name: String)
 
@@ -49,14 +51,20 @@ func _process(delta: float) -> void:
 
 
 func _handle_mode_switch() -> void:
-	if Input.is_action_just_pressed("cycle_mode_next"):
+	# Left / right mouse buttons cycle weapon modes (opposite directions).
+	var left := Input.is_mouse_button_pressed(MOUSE_BUTTON_LEFT)
+	var right := Input.is_mouse_button_pressed(MOUSE_BUTTON_RIGHT)
+	if left and not _prev_left_pressed:
 		_set_mode((current_mode + 1) % MODE_COUNT)
-	elif Input.is_action_just_pressed("cycle_mode_prev"):
+	elif right and not _prev_right_pressed:
 		_set_mode((current_mode - 1 + MODE_COUNT) % MODE_COUNT)
+	# quick_swap still supported via action if present
 	elif Input.is_action_just_pressed("quick_swap"):
 		var tmp := current_mode
 		_set_mode(last_mode)
 		last_mode = tmp
+	_prev_left_pressed = left
+	_prev_right_pressed = right
 
 
 func _set_mode(new_mode: int) -> void:
@@ -72,17 +80,14 @@ func _handle_fire() -> void:
 	match current_mode:
 		AmmoMode.BULLET:
 			_stop_beam()
-			if Input.is_action_pressed("fire") and _fire_cooldown <= 0.0:
+			if _fire_cooldown <= 0.0:
 				_fire_bullet()
 		AmmoMode.GRENADE:
 			_stop_beam()
-			if Input.is_action_just_pressed("fire") and _fire_cooldown <= 0.0:
+			if _fire_cooldown <= 0.0:
 				_fire_grenade()
 		AmmoMode.BEAM:
-			if Input.is_action_pressed("fire"):
-				_start_beam()
-			else:
-				_stop_beam()
+			_start_beam()
 
 
 func _fire_bullet() -> void:

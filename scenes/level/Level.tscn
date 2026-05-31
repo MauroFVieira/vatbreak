@@ -9,16 +9,16 @@
 [ext_resource type="PackedScene" uid="uid://b0dy05jvmblps" path="res://scenes/enemies/FnituDrifter.tscn" id="07_fnitu"]
 
 [sub_resource type="RectangleShape2D" id="WallH"]
-size = Vector2(1280, 24)
+size = Vector2(3840, 24)
 
 [sub_resource type="RectangleShape2D" id="WallV"]
-size = Vector2(24, 720)
+size = Vector2(24, 2160)
 
 [sub_resource type="RectangleShape2D" id="WallMid"]
-size = Vector2(24, 240)
+size = Vector2(24, 720)
 
 [sub_resource type="RectangleShape2D" id="WallShort"]
-size = Vector2(120, 24)
+size = Vector2(360, 24)
 
 [node name="Level" type="Node2D" unique_id=205721046]
 script = ExtResource("01_lvlscr")
@@ -28,210 +28,263 @@ obin_scene = ExtResource("06_obin")
 fnitu_scene = ExtResource("07_fnitu")
 
 [node name="Floor" type="ColorRect" parent="." unique_id=1504623048]
-offset_right = 1280.0
-offset_bottom = 720.0
-color = Color(0.09, 0.1, 0.09, 1)
+offset_left = -3840.0
+offset_top = -2208.0
+offset_right = 8205.0
+offset_bottom = 4722.0
+color = Color(0.51576227, 0.3234575, 0.15388197, 1)
+
+[node name="Floor2" type="ColorRect" parent="." unique_id=23416827]
+offset_left = 36.0
+offset_top = 36.0
+offset_right = 3804.0
+offset_bottom = 2124.0
+color = Color(0.34901962, 0.21176471, 0.09019608, 1)
 
 [node name="Walls" type="Node2D" parent="." unique_id=1251357419]
 
 [node name="WallTop" type="StaticBody2D" parent="Walls" unique_id=1616491692]
-position = Vector2(640, 0)
+position = Vector2(1920, 0)
 collision_layer = 4
 collision_mask = 3
 
 [node name="Shape" type="CollisionShape2D" parent="Walls/WallTop" unique_id=1124166742]
 shape = SubResource("WallH")
 
+[node name="Visual" type="Polygon2D" parent="Walls/WallTop" unique_id=200100001]
+color = Color(0.2, 0.2, 0.2, 1)
+polygon = [ Vector2(-1920, -12), Vector2(1920, -12), Vector2(1920, 12), Vector2(-1920, 12) ]
+
 [node name="WallBottom" type="StaticBody2D" parent="Walls" unique_id=913606047]
-position = Vector2(640, 720)
+position = Vector2(1920, 2160)
 collision_layer = 4
 collision_mask = 3
 
 [node name="Shape" type="CollisionShape2D" parent="Walls/WallBottom" unique_id=146350631]
 shape = SubResource("WallH")
 
+[node name="Visual" type="Polygon2D" parent="Walls/WallBottom" unique_id=200100002]
+color = Color(0.2, 0.2, 0.2, 1)
+polygon = [ Vector2(-1920, -12), Vector2(1920, -12), Vector2(1920, 12), Vector2(-1920, 12) ]
+
 [node name="WallLeft" type="StaticBody2D" parent="Walls" unique_id=1748331507]
-position = Vector2(0, 360)
+position = Vector2(0, 1080)
 collision_layer = 4
 collision_mask = 3
 
 [node name="Shape" type="CollisionShape2D" parent="Walls/WallLeft" unique_id=1536633325]
 shape = SubResource("WallV")
 
+[node name="Visual" type="Polygon2D" parent="Walls/WallLeft" unique_id=200100003]
+color = Color(0.2, 0.2, 0.2, 1)
+polygon = [ Vector2(-12, -1080), Vector2(12, -1080), Vector2(12, 1080), Vector2(-12, 1080) ]
+
 [node name="WallRight" type="StaticBody2D" parent="Walls" unique_id=1951124310]
-position = Vector2(1280, 360)
+position = Vector2(3840, 1080)
 collision_layer = 4
 collision_mask = 3
 
 [node name="Shape" type="CollisionShape2D" parent="Walls/WallRight" unique_id=1445364339]
 shape = SubResource("WallV")
 
+[node name="Visual" type="Polygon2D" parent="Walls/WallRight" unique_id=200100004]
+color = Color(0.2, 0.2, 0.2, 1)
+polygon = [ Vector2(-12, -1080), Vector2(12, -1080), Vector2(12, 1080), Vector2(-12, 1080) ]
+
 [node name="EnclosureA" type="Node2D" parent="." unique_id=1054290636]
 
 [node name="FloorA" type="ColorRect" parent="EnclosureA" unique_id=1319247936]
-offset_left = 40.0
-offset_top = 40.0
-offset_right = 340.0
-offset_bottom = 280.0
+offset_left = 120.0
+offset_top = 120.0
+offset_right = 1020.0
+offset_bottom = 840.0
 color = Color(0.06, 0.14, 0.08, 1)
 
 [node name="LabelA" type="Label" parent="EnclosureA" unique_id=2058451970]
-offset_left = 48.0
-offset_top = 44.0
+offset_left = 144.0
+offset_top = 132.0
 theme_override_colors/font_color = Color(0.25, 0.55, 0.3, 0.7)
 theme_override_font_sizes/font_size = 11
 text = "CONSU WING"
 
 [node name="WallALeft" type="StaticBody2D" parent="EnclosureA" unique_id=1604169868]
-position = Vector2(40, 160)
+position = Vector2(120, 480)
 collision_layer = 4
 collision_mask = 3
 
 [node name="Shape" type="CollisionShape2D" parent="EnclosureA/WallALeft" unique_id=356698550]
 shape = SubResource("WallMid")
 
+[node name="Visual" type="Polygon2D" parent="EnclosureA/WallALeft" unique_id=200100005]
+color = Color(0.25, 0.25, 0.25, 1)
+polygon = [ Vector2(-12, -360), Vector2(12, -360), Vector2(12, 360), Vector2(-12, 360) ]
+
 [node name="WallATop" type="StaticBody2D" parent="EnclosureA" unique_id=1153822795]
-position = Vector2(190, 40)
+position = Vector2(570, 120)
 collision_layer = 4
 collision_mask = 3
 
 [node name="Shape" type="CollisionShape2D" parent="EnclosureA/WallATop" unique_id=267067982]
 shape = SubResource("WallShort")
 
+[node name="Visual" type="Polygon2D" parent="EnclosureA/WallATop" unique_id=200100006]
+color = Color(0.25, 0.25, 0.25, 1)
+polygon = [ Vector2(-180, -12), Vector2(180, -12), Vector2(180, 12), Vector2(-180, 12) ]
+
 [node name="BreachMarkA" type="ColorRect" parent="EnclosureA" unique_id=1678134633]
-offset_left = 335.0
-offset_top = 100.0
-offset_right = 345.0
-offset_bottom = 185.0
+offset_left = 1005.0
+offset_top = 300.0
+offset_right = 1035.0
+offset_bottom = 555.0
 color = Color(0.6, 0.35, 0.1, 0.5)
 
 [node name="VatConsu" parent="EnclosureA" unique_id=1501122499 instance=ExtResource("03_vat")]
-position = Vector2(190, 160)
+position = Vector2(570, 480)
 enemy_scene = ExtResource("04_consu")
 
 [node name="EnclosureB" type="Node2D" parent="." unique_id=536822487]
 
 [node name="FloorB" type="ColorRect" parent="EnclosureB" unique_id=1014007033]
-offset_left = 490.0
-offset_top = 240.0
-offset_right = 790.0
-offset_bottom = 480.0
+offset_left = 1470.0
+offset_top = 720.0
+offset_right = 2370.0
+offset_bottom = 1440.0
 color = Color(0.12, 0.07, 0.06, 1)
 
 [node name="LabelB" type="Label" parent="EnclosureB" unique_id=1961935630]
-offset_left = 498.0
-offset_top = 244.0
+offset_left = 1494.0
+offset_top = 732.0
 theme_override_colors/font_color = Color(0.55, 0.2, 0.15, 0.7)
 theme_override_font_sizes/font_size = 11
 text = "RRAEY TERRARIUM"
 
 [node name="WallBTop" type="StaticBody2D" parent="EnclosureB" unique_id=455590610]
-position = Vector2(580, 240)
+position = Vector2(1740, 720)
 collision_layer = 4
 collision_mask = 3
 
 [node name="Shape" type="CollisionShape2D" parent="EnclosureB/WallBTop" unique_id=2069222686]
 shape = SubResource("WallShort")
 
+[node name="Visual" type="Polygon2D" parent="EnclosureB/WallBTop" unique_id=200100007]
+color = Color(0.25, 0.25, 0.25, 1)
+polygon = [ Vector2(-180, -12), Vector2(180, -12), Vector2(180, 12), Vector2(-180, 12) ]
+
 [node name="WallBLeft" type="StaticBody2D" parent="EnclosureB" unique_id=499812142]
-position = Vector2(490, 360)
+position = Vector2(1470, 1080)
 collision_layer = 4
 collision_mask = 3
 
 [node name="Shape" type="CollisionShape2D" parent="EnclosureB/WallBLeft" unique_id=1807540961]
 shape = SubResource("WallMid")
 
+[node name="Visual" type="Polygon2D" parent="EnclosureB/WallBLeft" unique_id=200100008]
+color = Color(0.25, 0.25, 0.25, 1)
+polygon = [ Vector2(-12, -360), Vector2(12, -360), Vector2(12, 360), Vector2(-12, 360) ]
+
 [node name="BreachMarkB" type="ColorRect" parent="EnclosureB" unique_id=1333354729]
-offset_left = 785.0
-offset_top = 280.0
-offset_right = 795.0
-offset_bottom = 380.0
+offset_left = 2355.0
+offset_top = 840.0
+offset_right = 2385.0
+offset_bottom = 1140.0
 color = Color(0.6, 0.35, 0.1, 0.5)
 
 [node name="VatRraey" parent="EnclosureB" unique_id=2109083693 instance=ExtResource("03_vat")]
-position = Vector2(640, 360)
+position = Vector2(1920, 1080)
 species_id = "rraey_brute"
 enemy_scene = ExtResource("05_rraey")
 
 [node name="EnclosureC" type="Node2D" parent="." unique_id=1331933127]
 
 [node name="FloorC" type="ColorRect" parent="EnclosureC" unique_id=2088859780]
-offset_left = 940.0
-offset_top = 40.0
-offset_right = 1240.0
-offset_bottom = 320.0
+offset_left = 2820.0
+offset_top = 120.0
+offset_right = 3720.0
+offset_bottom = 960.0
 color = Color(0.07, 0.06, 0.14, 1)
 
 [node name="LabelC" type="Label" parent="EnclosureC" unique_id=481745875]
-offset_left = 948.0
-offset_top = 44.0
+offset_left = 2844.0
+offset_top = 132.0
 theme_override_colors/font_color = Color(0.3, 0.2, 0.6, 0.7)
 theme_override_font_sizes/font_size = 11
 text = "OBIN HABITAT"
 
 [node name="WallCTop" type="StaticBody2D" parent="EnclosureC" unique_id=1503005928]
-position = Vector2(1090, 40)
+position = Vector2(3270, 120)
 collision_layer = 4
 collision_mask = 3
 
 [node name="Shape" type="CollisionShape2D" parent="EnclosureC/WallCTop" unique_id=1374283253]
 shape = SubResource("WallShort")
 
+[node name="Visual" type="Polygon2D" parent="EnclosureC/WallCTop" unique_id=200100009]
+color = Color(0.25, 0.25, 0.25, 1)
+polygon = [ Vector2(-180, -12), Vector2(180, -12), Vector2(180, 12), Vector2(-180, 12) ]
+
 [node name="WallCRight" type="StaticBody2D" parent="EnclosureC" unique_id=1509012983]
-position = Vector2(1240, 180)
+position = Vector2(3720, 540)
 collision_layer = 4
 collision_mask = 3
 
 [node name="Shape" type="CollisionShape2D" parent="EnclosureC/WallCRight" unique_id=1273787200]
 shape = SubResource("WallMid")
 
+[node name="Visual" type="Polygon2D" parent="EnclosureC/WallCRight" unique_id=200100010]
+color = Color(0.25, 0.25, 0.25, 1)
+polygon = [ Vector2(-12, -360), Vector2(12, -360), Vector2(12, 360), Vector2(-12, 360) ]
+
 [node name="BreachMarkC" type="ColorRect" parent="EnclosureC" unique_id=1745711514]
-offset_left = 935.0
-offset_top = 120.0
-offset_right = 945.0
-offset_bottom = 220.0
+offset_left = 2805.0
+offset_top = 360.0
+offset_right = 2835.0
+offset_bottom = 660.0
 color = Color(0.6, 0.35, 0.1, 0.5)
 
 [node name="VatObin" parent="EnclosureC" unique_id=364987202 instance=ExtResource("03_vat")]
-position = Vector2(1090, 180)
+position = Vector2(3270, 540)
 species_id = "obin_seer"
 enemy_scene = ExtResource("06_obin")
 
 [node name="EnclosureD" type="Node2D" parent="." unique_id=1879567428]
 
 [node name="FloorD" type="ColorRect" parent="EnclosureD" unique_id=2122659692]
-offset_left = 940.0
-offset_top = 480.0
-offset_right = 1240.0
-offset_bottom = 700.0
+offset_left = 2820.0
+offset_top = 1440.0
+offset_right = 3720.0
+offset_bottom = 2100.0
 color = Color(0.06, 0.12, 0.07, 1)
 
 [node name="LabelD" type="Label" parent="EnclosureD" unique_id=373310110]
-offset_left = 948.0
-offset_top = 484.0
+offset_left = 2844.0
+offset_top = 1452.0
 theme_override_colors/font_color = Color(0.25, 0.5, 0.25, 0.7)
 theme_override_font_sizes/font_size = 11
 text = "FNITU RESERVE"
 
 [node name="WallDLeft" type="StaticBody2D" parent="EnclosureD" unique_id=1951534360]
-position = Vector2(940, 590)
+position = Vector2(2820, 1770)
 collision_layer = 4
 collision_mask = 3
 
 [node name="Shape" type="CollisionShape2D" parent="EnclosureD/WallDLeft" unique_id=1805020886]
 shape = SubResource("WallMid")
 
+[node name="Visual" type="Polygon2D" parent="EnclosureD/WallDLeft" unique_id=200100011]
+color = Color(0.25, 0.25, 0.25, 1)
+polygon = [ Vector2(-12, -360), Vector2(12, -360), Vector2(12, 360), Vector2(-12, 360) ]
+
 [node name="BreachMarkD" type="ColorRect" parent="EnclosureD" unique_id=794661555]
-offset_left = 935.0
-offset_top = 560.0
-offset_right = 945.0
-offset_bottom = 630.0
+offset_left = 2805.0
+offset_top = 1680.0
+offset_right = 2835.0
+offset_bottom = 1890.0
 color = Color(0.6, 0.35, 0.1, 0.5)
 
 [node name="VatFnitu" parent="EnclosureD" unique_id=75940277 instance=ExtResource("03_vat")]
-position = Vector2(1090, 590)
+position = Vector2(3270, 1770)
 species_id = "fnitu_drifter"
 enemy_scene = ExtResource("07_fnitu")
 
 [node name="Player" parent="." unique_id=1390219000 instance=ExtResource("02_player")]
-position = Vector2(120, 560)
+position = Vector2(360, 1680)

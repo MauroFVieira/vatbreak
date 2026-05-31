@@ -16,8 +16,6 @@ var _vats:   Array = []
 
 
 func _ready() -> void:
-	GameState.reset()
-
 	# Let Level finish instantiating
 	await get_tree().process_frame
 

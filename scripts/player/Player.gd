@@ -4,7 +4,7 @@ extends CharacterBody2D
 #  Player.gd
 # ──────────────────────────────────────────────
 
-const SPEED := 250.0
+const SPEED := 230.0
 
 @export var max_health: int = 100
 

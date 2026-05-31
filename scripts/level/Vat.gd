@@ -14,7 +14,7 @@ signal vat_destroyed_signal(species_id: String)
 
 # Bloom
 const BLOOM_TIME      := 45.0   # seconds until vat blooms
-const SPAWN_INTERVAL  := 5.0    # base seconds per spawn
+const SPAWN_INTERVAL  := 3.0    # base seconds per spawn
 const BLOOM_TWEEN_DUR := 1.5
 
 enum Stage { ACTIVE, BLOOMED, DEAD }

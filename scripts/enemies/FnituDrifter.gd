@@ -15,11 +15,12 @@ var _shoot_timer: float = SHOOT_INTERVAL
 
 
 func _ready() -> void:
-	species_id      = "fnitu_drifter"
-	max_health      = 40
-	move_speed      = 70.0
-	contact_damage  = 8
+	species_id       = "fnitu_drifter"
+	max_health       = 40
+	move_speed       = 70.0
+	contact_damage   = 8
 	contact_cooldown = 1.2
+	shard_color      = Color(0.62, 0.72, 0.12, 1)
 	super._ready()
 
 
@@ -28,10 +29,9 @@ func _species_process(delta: float) -> void:
 	if _player_ref == null:
 		return
 
-	var dist := global_position.distance_to(_player_ref.global_position)
+	var dist       := global_position.distance_to(_player_ref.global_position)
+	var to_player  :Vector2= (_player_ref.global_position - global_position).normalized()
 
-	# Maintain preferred range
-	var to_player:Vector2 = (_player_ref.global_position - global_position).normalized()
 	if dist > PREFERRED_RANGE + 40.0:
 		velocity = to_player * move_speed
 	elif dist < PREFERRED_RANGE - 40.0:
@@ -50,6 +50,6 @@ func _fire_glob() -> void:
 	var glob = acid_glob_scene.instantiate()
 	get_tree().current_scene.add_child(glob)
 	glob.global_position = global_position
-	glob.direction = ((_player_ref.global_position - global_position).normalized())
-	glob.speed  = GLOB_SPEED
-	glob.damage = GLOB_DAMAGE
+	glob.direction       = (_player_ref.global_position - global_position).normalized()
+	glob.speed           = GLOB_SPEED
+	glob.damage          = GLOB_DAMAGE

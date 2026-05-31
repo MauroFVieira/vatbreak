@@ -78,7 +78,7 @@ func _on_mode_changed(mode_name: String) -> void:
 
 
 func _on_vat_bloomed(species_id: String) -> void:
-	_display_center_message(species_id + ": VAT BLOOMED")
+	_display_center_message("VATS BLOOMED")
 
 
 func _display_center_message(msg: String) -> void:

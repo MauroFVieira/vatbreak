@@ -91,7 +91,7 @@ func _process_nano_burn(delta: float) -> void:
 func die() -> void:
 	dead = true
 	# TODO: death VFX / loot drop
-	queue_free()
+	call_deferred("queue_free")
 
 
 # ── Contact damage on player ──

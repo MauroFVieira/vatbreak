@@ -55,7 +55,7 @@ func _explode() -> void:
 			else:
 				col.take_damage(damage)
 	# TODO: spawn explosion VFX here
-	queue_free()
+	call_deferred("queue_free")
 
 
 func _draw_explosion() -> void:

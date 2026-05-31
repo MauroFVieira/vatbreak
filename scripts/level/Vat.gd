@@ -104,4 +104,4 @@ func _destroy() -> void:
 	GameState.on_vat_destroyed(species_id)
 	emit_signal("vat_destroyed_signal", species_id)
 	# TODO: explosion VFX
-	queue_free()
+	call_deferred("queue_free")

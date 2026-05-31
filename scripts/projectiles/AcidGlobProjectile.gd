@@ -26,7 +26,7 @@ func _physics_process(delta: float) -> void:
 	position += move
 	_distance_travelled += move.length()
 	if _distance_travelled >= MAX_RANGE_PX:
-		queue_free()
+		call_deferred("queue_free")
 
 
 func _on_body_entered(body: Node) -> void:
@@ -35,4 +35,4 @@ func _on_body_entered(body: Node) -> void:
 	if body.has_method("apply_slow"):
 		body.apply_slow(SLOW_FACTOR, SLOW_DURATION)
 	# TODO: acid splat VFX
-	queue_free()
+	call_deferred("queue_free")

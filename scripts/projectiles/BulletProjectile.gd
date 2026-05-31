@@ -24,7 +24,7 @@ func _physics_process(delta: float) -> void:
 	position += move
 	_distance_travelled += move.length()
 	if _distance_travelled >= MAX_RANGE_PX:
-		queue_free()
+		call_deferred("queue_free")
 
 
 func _on_body_entered(body: Node) -> void:
@@ -38,13 +38,13 @@ func _on_area_entered(area: Node) -> void:
 func _hit(target: Node) -> void:
 	var resolved := _resolve_damage_target(target)
 	if resolved == null:
-		queue_free()
+		call_deferred("queue_free")
 		return
 	var dmg := damage
 	if resolved.get("is_weakpoint"):
 		dmg *= 2
 	resolved.take_damage(dmg)
-	queue_free()
+	call_deferred("queue_free")
 
 
 func _resolve_damage_target(target: Node) -> Node:

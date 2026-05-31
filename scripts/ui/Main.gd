@@ -39,11 +39,21 @@ func _ready() -> void:
 
 
 func _on_win() -> void:
-	# Show win screen or end screen scene
-	get_tree().change_scene_to_file("res://scenes/ui/EndScreen.tscn")
+	# Defer scene change to avoid removing CollisionObjects during physics callbacks
+	call_deferred("_on_win_deferred")
 
 
 func _on_lose() -> void:
-	# Brief pause then back to title
+	# Defer the lose flow so it's not executed during a physics callback
+	call_deferred("_on_lose_deferred")
+
+
+func _on_win_deferred() -> void:
+	# Show win screen or end screen scene (deferred)
+	get_tree().change_scene_to_file("res://scenes/ui/EndScreen.tscn")
+
+
+func _on_lose_deferred() -> void:
+	# Brief pause then back to title (deferred)
 	await get_tree().create_timer(1.5).timeout
 	get_tree().change_scene_to_file("res://scenes/ui/TitleScreen.tscn")

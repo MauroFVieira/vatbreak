@@ -1,41 +1,56 @@
 [gd_scene format=3 uid="uid://vat"]
 
 [ext_resource type="Script" uid="uid://coudg048dcnod" path="res://scripts/level/Vat.gd" id="1_vat"]
-[ext_resource type="Texture2D" uid="uid://buswattvt1ko" path="res://sprites/vat.png" id="2_lr7qn"]
 
-[sub_resource type="CapsuleShape2D" id="CapsuleShape2D_1"]
-radius = 20.0
-height = 48.0
+[sub_resource type="CircleShape2D" id="CircleShape2D_body"]
+radius = 24.0
 
 [sub_resource type="CircleShape2D" id="CircleShape2D_weakpoint"]
+radius = 10.0
 
 [node name="Vat" type="StaticBody2D" unique_id=466093404]
 collision_layer = 4
 collision_mask = 8
 script = ExtResource("1_vat")
 
-[node name="Sprite2D" type="Sprite2D" parent="." unique_id=1992024788]
-modulate = Color(0.55, 0.65, 0.7, 1)
-texture = ExtResource("2_lr7qn")
+[node name="Body" type="Polygon2D" parent="." unique_id=1992024789]
+color = Color(0.18, 0.28, 0.22, 1)
+polygon = PackedVector2Array(-20, -28, 20, -28, 28, -16, 28, 16, 20, 28, -20, 28, -28, 16, -28, -16)
+
+[node name="Ring" type="Polygon2D" parent="." unique_id=1992024790]
+color = Color(0.08, 0.55, 0.18, 1)
+polygon = PackedVector2Array(-24, -10, 24, -10, 24, -4, -24, -4)
+
+[node name="Ring2" type="Polygon2D" parent="." unique_id=1992024791]
+color = Color(0.08, 0.55, 0.18, 1)
+polygon = PackedVector2Array(-24, 4, 24, 4, 24, 10, -24, 10)
+
+[node name="Cap" type="Polygon2D" parent="." unique_id=1992024792]
+color = Color(0.12, 0.38, 0.18, 1)
+polygon = PackedVector2Array(-14, -28, 14, -28, 18, -20, -18, -20)
+
+[node name="WeakpointMarker" type="Polygon2D" parent="." unique_id=1992024793]
+color = Color(0.9, 0.85, 0.1, 0.85)
+polygon = PackedVector2Array(-8, 14, 8, 14, 8, 20, -8, 20)
 
 [node name="CollisionShape2D" type="CollisionShape2D" parent="." unique_id=1918406256]
-shape = SubResource("CapsuleShape2D_1")
+shape = SubResource("CircleShape2D_body")
 
 [node name="PointLight2D" type="PointLight2D" parent="." unique_id=1948861341]
-color = Color(0.1, 0.9, 0.2, 1)
-energy = 1.2
-texture_scale = 2.0
+color = Color(0.1, 1.0, 0.25, 1)
+energy = 1.8
+texture_scale = 3.5
 
 [node name="HealthBar" type="ProgressBar" parent="." unique_id=480040156]
 offset_left = -32.0
-offset_top = -56.0
+offset_top = -52.0
 offset_right = 32.0
-offset_bottom = -44.0
-max_value = 200.0
-value = 200.0
+offset_bottom = -42.0
+max_value = 600.0
+value = 600.0
 
 [node name="Weakpoint" type="Area2D" parent="." unique_id=1930432497]
-position = Vector2(0, 12)
+position = Vector2(0, 17)
 collision_layer = 4
 collision_mask = 8
 

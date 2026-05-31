@@ -8,7 +8,6 @@ extends Area2D
 var direction: Vector2 = Vector2.RIGHT
 var speed: float = 800.0
 var damage: int = 12
-var is_vat_shot: bool = false   # set externally if aimed at weakpoint; vat checks this
 
 const MAX_RANGE_PX := 1200.0
 var _distance_travelled: float = 0.0
@@ -36,13 +35,15 @@ func _on_area_entered(area: Node) -> void:
 
 
 func _hit(target: Node) -> void:
+	# Capture the weakpoint flag BEFORE walking up to the parent that has take_damage.
+	# resolved.get("is_weakpoint") would always return null because the flag lives on
+	# the Weakpoint Area2D child, not on the Vat StaticBody2D that receives the damage.
+	var is_weak: bool = target.get("is_weakpoint") == true
 	var resolved := _resolve_damage_target(target)
 	if resolved == null:
 		call_deferred("queue_free")
 		return
-	var dmg := damage
-	if resolved.get("is_weakpoint"):
-		dmg *= 2
+	var dmg := damage * (2 if is_weak else 1)
 	resolved.take_damage(dmg)
 	call_deferred("queue_free")
 

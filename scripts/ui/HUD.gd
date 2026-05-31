@@ -7,14 +7,19 @@ extends CanvasLayer
 #  Vat status row (top-right): green / red / ✕
 # ──────────────────────────────────────────────
 
-@onready var health_bar:      ProgressBar = $TopLeft/HealthBar
-@onready var health_label:    Label       = $TopLeft/HealthLabel
-@onready var mode_label:      Label       = $BottomCentre/ModeLabel
-@onready var center_message:  Label       = $CenterMessage
+@onready var health_bar:      ProgressBar   = $TopLeft/HealthBar
+@onready var health_label:    Label         = $TopLeft/HealthLabel
+@onready var mode_label:      Label         = $BottomCentre/ModeLabel
+@onready var center_message:  Label         = $CenterMessage
 @onready var vat_status_row:  HBoxContainer = $TopRight/VatRow
 
 # Track signal connections for cleanup on exit
-var _connections: Array = []  # Array of (object, signal, callable) tuples
+var _connections: Array = []
+
+# Message queue so rapid bloom events don't overwrite each other
+var _message_queue: Array[String] = []
+var _message_busy: bool = false
+
 
 # Called by Main when player and vats are ready
 func init(player: Node, mp35: Node, vats: Array) -> void:
@@ -38,23 +43,23 @@ func init(player: Node, mp35: Node, vats: Array) -> void:
 		icon.custom_minimum_size = Vector2(20, 20)
 		icon.color = Color(0.1, 0.9, 0.1)   # green = active
 		vat_status_row.add_child(icon)
-		# Connect vat signals explicitly and track for cleanup
-		var dead_callback = Callable(self, "_mark_vat_dead").bindv([icon])
+
+		var dead_callback := Callable(self, "_mark_vat_dead").bindv([icon])
 		vat.connect("vat_destroyed_signal", dead_callback)
 		_connections.append([vat, "vat_destroyed_signal", dead_callback])
-		
-		var bloom_callback = Callable(self, "_mark_vat_bloomed").bindv([icon])
-		vat.connect("vat_bloomed", bloom_callback)
-		_connections.append([vat, "vat_bloomed", bloom_callback])
-		
-		vat.connect("vat_bloomed", Callable(self, "_on_vat_bloomed"))
-		_connections.append([vat, "vat_bloomed", Callable(self, "_on_vat_bloomed")])
+
+		var bloom_icon_callback := Callable(self, "_mark_vat_bloomed").bindv([icon])
+		vat.connect("vat_bloomed", bloom_icon_callback)
+		_connections.append([vat, "vat_bloomed", bloom_icon_callback])
+
+		var bloom_msg_callback := Callable(self, "_on_vat_bloomed").bindv([vat])
+		vat.connect("vat_bloomed", bloom_msg_callback)
+		_connections.append([vat, "vat_bloomed", bloom_msg_callback])
 
 
 func _exit_tree() -> void:
-	# Disconnect all tracked signals to prevent cleanup errors on scene transitions
 	for conn_info in _connections:
-		var obj = conn_info[0]
+		var obj      = conn_info[0]
 		var sig_name = conn_info[1]
 		var callable = conn_info[2]
 		if is_instance_valid(obj) and obj.is_connected(sig_name, callable):
@@ -77,18 +82,12 @@ func _on_mode_changed(mode_name: String) -> void:
 		mode_label.text = "[ %s ]" % mode_name
 
 
-func _on_vat_bloomed(species_id: String) -> void:
-	_display_center_message("VATS BLOOMED")
-
-
-func _display_center_message(msg: String) -> void:
-	if center_message == null:
-		return
-	center_message.text = msg
-	center_message.visible = true
-	await get_tree().create_timer(2.0).timeout
-	if center_message:
-		center_message.visible = false
+func _on_vat_bloomed(species_id: String, vat: Node) -> void:
+	# Ask the vat itself for the display name so the mapping lives in one place
+	var display: String = species_id.to_upper()
+	if is_instance_valid(vat) and vat.has_method("get_display_name"):
+		display = vat.get_display_name()
+	_queue_message("%s VAT BLOOMED\n⚠ SPAWN RATE ×2" % display)
 
 
 func _mark_vat_dead(_species_id: String, icon: ColorRect) -> void:
@@ -99,7 +98,31 @@ func _mark_vat_bloomed(_species_id: String, icon: ColorRect) -> void:
 	icon.color = Color(0.9, 0.1, 0.1)   # red = bloomed
 
 
-func _check_bloom(_species_id: String, vat: Node, icon: ColorRect) -> void:
-	# Poll the vat's stage; if bloomed show red
-	if is_instance_valid(vat) and vat.stage == 1:   # Stage.BLOOMED == 1
-		icon.color = Color(0.9, 0.1, 0.1)
+# ── Message queue ──────────────────────────────
+
+func _queue_message(msg: String) -> void:
+	_message_queue.append(msg)
+	if not _message_busy:
+		_pump_message_queue()
+
+
+func _pump_message_queue() -> void:
+	if _message_queue.is_empty():
+		_message_busy = false
+		return
+	_message_busy = true
+	var msg := _message_queue.pop_front() as String
+	_show_message(msg)
+
+
+func _show_message(msg: String) -> void:
+	if center_message == null:
+		_pump_message_queue()
+		return
+	center_message.text = msg
+	center_message.visible = true
+	await get_tree().create_timer(2.5).timeout
+	if center_message:
+		center_message.visible = false
+	await get_tree().create_timer(0.2).timeout
+	_pump_message_queue()

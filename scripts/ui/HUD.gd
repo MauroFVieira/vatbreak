@@ -13,16 +13,21 @@ extends CanvasLayer
 @onready var center_message:  Label       = $CenterMessage
 @onready var vat_status_row:  HBoxContainer = $TopRight/VatRow
 
+# Track signal connections for cleanup on exit
+var _connections: Array = []  # Array of (object, signal, callable) tuples
+
 # Called by Main when player and vats are ready
 func init(player: Node, mp35: Node, vats: Array) -> void:
 	# Player health
 	player.health_changed.connect(_on_health_changed)
+	_connections.append([player, "health_changed", Callable(self, "_on_health_changed")])
 	health_bar.max_value = player.max_health
 	health_bar.value     = player.health
 	_update_health_label(player.health, player.max_health)
 
 	# Ammo mode
 	mp35.mode_changed.connect(_on_mode_changed)
+	_connections.append([mp35, "mode_changed", Callable(self, "_on_mode_changed")])
 	_on_mode_changed("BULLET")
 
 	# Vat status icons
@@ -33,13 +38,28 @@ func init(player: Node, mp35: Node, vats: Array) -> void:
 		icon.custom_minimum_size = Vector2(20, 20)
 		icon.color = Color(0.1, 0.9, 0.1)   # green = active
 		vat_status_row.add_child(icon)
-		# Connect vat signals
-		vat.connect("vat_destroyed_signal", func(_id): _mark_vat_dead(icon))
-		GameState.vat_destroyed.connect(func(_id): _check_bloom(vat, icon))
+		# Connect vat signals explicitly and track for cleanup
+		var dead_callback = Callable(self, "_mark_vat_dead").bindv([icon])
+		vat.connect("vat_destroyed_signal", dead_callback)
+		_connections.append([vat, "vat_destroyed_signal", dead_callback])
+		
+		var bloom_callback = Callable(self, "_mark_vat_bloomed").bindv([icon])
+		vat.connect("vat_bloomed", bloom_callback)
+		_connections.append([vat, "vat_bloomed", bloom_callback])
+		
+		vat.connect("vat_bloomed", Callable(self, "_on_vat_bloomed"))
+		_connections.append([vat, "vat_bloomed", Callable(self, "_on_vat_bloomed")])
 
-	# Global bloom announcements
-	if GameState.has_signal("vat_bloomed"):
-		GameState.vat_bloomed.connect(_on_vat_bloomed)
+
+func _exit_tree() -> void:
+	# Disconnect all tracked signals to prevent cleanup errors on scene transitions
+	for conn_info in _connections:
+		var obj = conn_info[0]
+		var sig_name = conn_info[1]
+		var callable = conn_info[2]
+		if is_instance_valid(obj) and obj.is_connected(sig_name, callable):
+			obj.disconnect(sig_name, callable)
+	_connections.clear()
 
 
 func _on_health_changed(current: int, maximum: int) -> void:
@@ -71,11 +91,15 @@ func _display_center_message(msg: String) -> void:
 		center_message.visible = false
 
 
-func _mark_vat_dead(icon: ColorRect) -> void:
+func _mark_vat_dead(_species_id: String, icon: ColorRect) -> void:
 	icon.color = Color(0.3, 0.3, 0.3)   # grey = destroyed
 
 
-func _check_bloom(vat: Node, icon: ColorRect) -> void:
+func _mark_vat_bloomed(_species_id: String, icon: ColorRect) -> void:
+	icon.color = Color(0.9, 0.1, 0.1)   # red = bloomed
+
+
+func _check_bloom(_species_id: String, vat: Node, icon: ColorRect) -> void:
 	# Poll the vat's stage; if bloomed show red
 	if is_instance_valid(vat) and vat.stage == 1:   # Stage.BLOOMED == 1
 		icon.color = Color(0.9, 0.1, 0.1)

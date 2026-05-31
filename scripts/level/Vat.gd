@@ -11,7 +11,7 @@ signal vat_bloomed(species_id: String)
 
 @export var species_id: String = "consu_crawler"
 @export var enemy_scene: PackedScene
-@export var max_health: int = 200
+@export var max_health: int = 600   # tripled from 200
 
 # Bloom
 const BLOOM_TIME      := 45.0   # seconds until vat blooms
@@ -32,6 +32,7 @@ var _spawn_timer: float = 0.0
 
 func _ready() -> void:
 	health = max_health
+	add_to_group("vats")
 	GameState.register_vat(species_id)
 	if health_bar:
 		health_bar.max_value = max_health
@@ -81,10 +82,16 @@ func _try_spawn() -> void:
 	enemy.global_position = global_position + offset
 
 
-func take_damage(amount: int) -> void:
+func take_damage(amount: int, damage_type: String = "bullet") -> void:
 	if stage == Stage.DEAD:
 		return
-	health -= amount
+	# Apply type modifiers
+	var final_damage := amount
+	if damage_type == "grenade":
+		final_damage = int(amount * 0.6)   # 40% resistance to grenades
+	elif damage_type == "beam":
+		final_damage = int(amount * 1.6)   # 60% vulnerability to beams
+	health -= final_damage
 	health = maxi(health, 0)
 	if health_bar:
 		health_bar.value = health

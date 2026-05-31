@@ -40,7 +40,11 @@ func _on_tick() -> void:
 	if _current_hit == null:
 		return
 	if _current_hit.has_method("take_damage"):
-		_current_hit.take_damage(tick_damage)
+		# Pass damage type for vat vulnerability calculation
+		if _current_hit.get_script() and _current_hit.get_script().resource_path.contains("Vat"):
+			_current_hit.take_damage(tick_damage, "beam")
+		else:
+			_current_hit.take_damage(tick_damage)
 	# Apply / refresh NanoBurn stack
 	if _current_hit.has_method("apply_nano_burn"):
 		_current_hit.apply_nano_burn(tick_damage)

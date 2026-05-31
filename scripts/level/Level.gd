@@ -16,10 +16,10 @@ extends Node2D
 
 # How many of each species to pre-place at start
 const INITIAL_COUNTS := {
-	"consu":  10,
-	"rraey":  3,
-	"obin":   2,
-	"fnitu":  4,
+	"consu":  15,
+	"rraey":  5,
+	"obin":   3,
+	"fnitu":  6,
 }
 
 # Rough spread regions (centre, half-extents)

@@ -7,6 +7,7 @@ extends StaticBody2D
 # ──────────────────────────────────────────────
 
 signal vat_destroyed_signal(species_id: String)
+signal vat_bloomed(species_id: String)
 
 @export var species_id: String = "consu_crawler"
 @export var enemy_scene: PackedScene
@@ -59,6 +60,8 @@ func _physics_process(delta: float) -> void:
 
 func _bloom() -> void:
 	stage = Stage.BLOOMED
+	GameState.on_vat_bloomed(species_id)
+	emit_signal("vat_bloomed", species_id)
 	# Tween light from green to red
 	if light:
 		var tween := create_tween()

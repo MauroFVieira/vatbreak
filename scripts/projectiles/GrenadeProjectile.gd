@@ -42,11 +42,21 @@ func _explode() -> void:
 	shape.radius = explosion_radius
 	query.shape = shape
 	query.transform = Transform2D(0.0, global_position)
-	query.collision_mask = 0b0010  # enemies layer; adjust to match your layer setup
+	query.collision_mask = 0b110  # enemies + vats
 	var results := space.intersect_shape(query, 32)
 	for r in results:
-		var col = r["collider"]
-		if col.has_method("take_damage"):
+		var col = _resolve_damage_target(r["collider"])
+		if col != null and col.has_method("take_damage"):
 			col.take_damage(damage)
 	# TODO: spawn explosion VFX here
 	queue_free()
+
+
+func _resolve_damage_target(target: Node) -> Node:
+	if target == null:
+		return null
+	if target.has_method("take_damage"):
+		return target
+	if target.get_parent() != null:
+		return _resolve_damage_target(target.get_parent())
+	return null

@@ -42,6 +42,24 @@ theme_override_colors/font_color = Color(0.2, 1, 0.4, 1)
 theme_override_font_sizes/font_size = 20
 text = "[ BULLET ]"
 
+[node name="CenterMessage" type="Label" parent="." unique_id=1938432200]
+anchors_preset = 7
+anchor_left = 0.5
+anchor_top = 0.5
+anchor_right = 0.5
+anchor_bottom = 0.5
+offset_left = -220.0
+offset_top = -40.0
+offset_right = 220.0
+offset_bottom = 40.0
+layout_mode = 2
+theme_override_colors/font_color = Color(1, 0.9, 0.2, 1)
+theme_override_font_sizes/font_size = 26
+horizontal_alignment = 2
+vertical_alignment = 1
+text = ""
+visible = false
+
 [node name="TopRight" type="VBoxContainer" parent="." unique_id=1690013297]
 anchors_preset = 1
 anchor_left = 1.0

@@ -36,8 +36,22 @@ func _on_area_entered(area: Node) -> void:
 
 
 func _hit(target: Node) -> void:
-	if target.has_method("take_damage"):
-		# Vat weakpoint doubles bullet damage
-		var dmg := damage * 2 if target.get("is_weakpoint") else damage
-		target.take_damage(dmg)
+	var resolved := _resolve_damage_target(target)
+	if resolved == null:
+		queue_free()
+		return
+	var dmg := damage
+	if resolved.get("is_weakpoint"):
+		dmg *= 2
+	resolved.take_damage(dmg)
 	queue_free()
+
+
+func _resolve_damage_target(target: Node) -> Node:
+	if target == null:
+		return null
+	if target.has_method("take_damage"):
+		return target
+	if target.get_parent() != null:
+		return _resolve_damage_target(target.get_parent())
+	return null

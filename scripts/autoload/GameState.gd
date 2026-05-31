@@ -7,6 +7,7 @@ extends Node
 # ──────────────────────────────────────────────
 
 signal vat_destroyed(species_id: String)
+signal vat_bloomed(species_id: String)
 signal all_vats_destroyed()
 signal player_died()
 
@@ -55,6 +56,10 @@ func on_vat_destroyed(species_id: String) -> void:
 func on_player_died() -> void:
 	timer_running = false
 	emit_signal("player_died")
+
+
+func on_vat_bloomed(species_id: String) -> void:
+	emit_signal("vat_bloomed", species_id)
 
 
 func start_timer() -> void:

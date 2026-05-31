@@ -10,6 +10,7 @@ extends CanvasLayer
 @onready var health_bar:      ProgressBar = $TopLeft/HealthBar
 @onready var health_label:    Label       = $TopLeft/HealthLabel
 @onready var mode_label:      Label       = $BottomCentre/ModeLabel
+@onready var center_message:  Label       = $CenterMessage
 @onready var vat_status_row:  HBoxContainer = $TopRight/VatRow
 
 # Called by Main when player and vats are ready
@@ -36,6 +37,10 @@ func init(player: Node, mp35: Node, vats: Array) -> void:
 		vat.connect("vat_destroyed_signal", func(_id): _mark_vat_dead(icon))
 		GameState.vat_destroyed.connect(func(_id): _check_bloom(vat, icon))
 
+	# Global bloom announcements
+	if GameState.has_signal("vat_bloomed"):
+		GameState.vat_bloomed.connect(_on_vat_bloomed)
+
 
 func _on_health_changed(current: int, maximum: int) -> void:
 	health_bar.value = current
@@ -50,6 +55,20 @@ func _update_health_label(cur: int, max_val: int) -> void:
 func _on_mode_changed(mode_name: String) -> void:
 	if mode_label:
 		mode_label.text = "[ %s ]" % mode_name
+
+
+func _on_vat_bloomed(species_id: String) -> void:
+	_display_center_message("VAT BLOOMED")
+
+
+func _display_center_message(msg: String) -> void:
+	if center_message == null:
+		return
+	center_message.text = msg
+	center_message.visible = true
+	await get_tree().create_timer(2.0).timeout
+	if center_message:
+		center_message.visible = false
 
 
 func _mark_vat_dead(icon: ColorRect) -> void:

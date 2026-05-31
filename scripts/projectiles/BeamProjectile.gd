@@ -29,7 +29,7 @@ func _physics_process(_delta: float) -> void:
 	ray.force_raycast_update()
 	if ray.is_colliding():
 		var hit_point := to_local(ray.get_collision_point())
-		_current_hit = ray.get_collider()
+		_current_hit = _resolve_target(ray.get_collider())
 		_update_line(hit_point)
 	else:
 		_current_hit = null
@@ -44,6 +44,16 @@ func _on_tick() -> void:
 	# Apply / refresh NanoBurn stack
 	if _current_hit.has_method("apply_nano_burn"):
 		_current_hit.apply_nano_burn(tick_damage)
+
+
+func _resolve_target(target: Node) -> Node:
+	if target == null:
+		return null
+	if target.has_method("take_damage") or target.has_method("apply_nano_burn"):
+		return target
+	if target.get_parent() != null:
+		return _resolve_target(target.get_parent())
+	return target
 
 
 func _update_line(end: Vector2) -> void:

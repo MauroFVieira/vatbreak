@@ -53,7 +53,7 @@ shape = SubResource("WallH")
 
 [node name="Visual" type="Polygon2D" parent="Walls/WallTop" unique_id=200100001]
 color = Color(0.2, 0.2, 0.2, 1)
-polygon = [ Vector2(-1920, -12), Vector2(1920, -12), Vector2(1920, 12), Vector2(-1920, 12) ]
+polygon = PackedVector2Array(-1920, -12, 1920, -12, 1920, 12, -1920, 12)
 
 [node name="WallBottom" type="StaticBody2D" parent="Walls" unique_id=913606047]
 position = Vector2(1920, 2160)
@@ -65,7 +65,7 @@ shape = SubResource("WallH")
 
 [node name="Visual" type="Polygon2D" parent="Walls/WallBottom" unique_id=200100002]
 color = Color(0.2, 0.2, 0.2, 1)
-polygon = [ Vector2(-1920, -12), Vector2(1920, -12), Vector2(1920, 12), Vector2(-1920, 12) ]
+polygon = PackedVector2Array(-1920, -12, 1920, -12, 1920, 12, -1920, 12)
 
 [node name="WallLeft" type="StaticBody2D" parent="Walls" unique_id=1748331507]
 position = Vector2(0, 1080)
@@ -77,7 +77,7 @@ shape = SubResource("WallV")
 
 [node name="Visual" type="Polygon2D" parent="Walls/WallLeft" unique_id=200100003]
 color = Color(0.2, 0.2, 0.2, 1)
-polygon = [ Vector2(-12, -1080), Vector2(12, -1080), Vector2(12, 1080), Vector2(-12, 1080) ]
+polygon = PackedVector2Array(-12, -1080, 12, -1080, 12, 1080, -12, 1080)
 
 [node name="WallRight" type="StaticBody2D" parent="Walls" unique_id=1951124310]
 position = Vector2(3840, 1080)
@@ -89,7 +89,7 @@ shape = SubResource("WallV")
 
 [node name="Visual" type="Polygon2D" parent="Walls/WallRight" unique_id=200100004]
 color = Color(0.2, 0.2, 0.2, 1)
-polygon = [ Vector2(-12, -1080), Vector2(12, -1080), Vector2(12, 1080), Vector2(-12, 1080) ]
+polygon = PackedVector2Array(-12, -1080, 12, -1080, 12, 1080, -12, 1080)
 
 [node name="EnclosureA" type="Node2D" parent="." unique_id=1054290636]
 
@@ -117,7 +117,7 @@ shape = SubResource("WallMid")
 
 [node name="Visual" type="Polygon2D" parent="EnclosureA/WallALeft" unique_id=200100005]
 color = Color(0.25, 0.25, 0.25, 1)
-polygon = [ Vector2(-12, -360), Vector2(12, -360), Vector2(12, 360), Vector2(-12, 360) ]
+polygon = PackedVector2Array(-12, -360, 12, -360, 12, 360, -12, 360)
 
 [node name="WallATop" type="StaticBody2D" parent="EnclosureA" unique_id=1153822795]
 position = Vector2(570, 120)
@@ -129,7 +129,7 @@ shape = SubResource("WallShort")
 
 [node name="Visual" type="Polygon2D" parent="EnclosureA/WallATop" unique_id=200100006]
 color = Color(0.25, 0.25, 0.25, 1)
-polygon = [ Vector2(-180, -12), Vector2(180, -12), Vector2(180, 12), Vector2(-180, 12) ]
+polygon = PackedVector2Array(-180, -12, 180, -12, 180, 12, -180, 12)
 
 [node name="BreachMarkA" type="ColorRect" parent="EnclosureA" unique_id=1678134633]
 offset_left = 1005.0
@@ -168,7 +168,7 @@ shape = SubResource("WallShort")
 
 [node name="Visual" type="Polygon2D" parent="EnclosureB/WallBTop" unique_id=200100007]
 color = Color(0.25, 0.25, 0.25, 1)
-polygon = [ Vector2(-180, -12), Vector2(180, -12), Vector2(180, 12), Vector2(-180, 12) ]
+polygon = PackedVector2Array(-180, -12, 180, -12, 180, 12, -180, 12)
 
 [node name="WallBLeft" type="StaticBody2D" parent="EnclosureB" unique_id=499812142]
 position = Vector2(1470, 1080)
@@ -180,7 +180,7 @@ shape = SubResource("WallMid")
 
 [node name="Visual" type="Polygon2D" parent="EnclosureB/WallBLeft" unique_id=200100008]
 color = Color(0.25, 0.25, 0.25, 1)
-polygon = [ Vector2(-12, -360), Vector2(12, -360), Vector2(12, 360), Vector2(-12, 360) ]
+polygon = PackedVector2Array(-12, -360, 12, -360, 12, 360, -12, 360)
 
 [node name="BreachMarkB" type="ColorRect" parent="EnclosureB" unique_id=1333354729]
 offset_left = 2355.0
@@ -220,7 +220,7 @@ shape = SubResource("WallShort")
 
 [node name="Visual" type="Polygon2D" parent="EnclosureC/WallCTop" unique_id=200100009]
 color = Color(0.25, 0.25, 0.25, 1)
-polygon = [ Vector2(-180, -12), Vector2(180, -12), Vector2(180, 12), Vector2(-180, 12) ]
+polygon = PackedVector2Array(-180, -12, 180, -12, 180, 12, -180, 12)
 
 [node name="WallCRight" type="StaticBody2D" parent="EnclosureC" unique_id=1509012983]
 position = Vector2(3720, 540)
@@ -232,7 +232,7 @@ shape = SubResource("WallMid")
 
 [node name="Visual" type="Polygon2D" parent="EnclosureC/WallCRight" unique_id=200100010]
 color = Color(0.25, 0.25, 0.25, 1)
-polygon = [ Vector2(-12, -360), Vector2(12, -360), Vector2(12, 360), Vector2(-12, 360) ]
+polygon = PackedVector2Array(-12, -360, 12, -360, 12, 360, -12, 360)
 
 [node name="BreachMarkC" type="ColorRect" parent="EnclosureC" unique_id=1745711514]
 offset_left = 2805.0
@@ -272,7 +272,7 @@ shape = SubResource("WallMid")
 
 [node name="Visual" type="Polygon2D" parent="EnclosureD/WallDLeft" unique_id=200100011]
 color = Color(0.25, 0.25, 0.25, 1)
-polygon = [ Vector2(-12, -360), Vector2(12, -360), Vector2(12, 360), Vector2(-12, 360) ]
+polygon = PackedVector2Array(-12, -360, 12, -360, 12, 360, -12, 360)
 
 [node name="BreachMarkD" type="ColorRect" parent="EnclosureD" unique_id=794661555]
 offset_left = 2805.0

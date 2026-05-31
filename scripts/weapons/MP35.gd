@@ -52,8 +52,8 @@ func _process(delta: float) -> void:
 
 func _handle_mode_switch() -> void:
 	# Left / right mouse buttons cycle weapon modes (opposite directions).
-	var left := Input.is_mouse_button_pressed(MOUSE_BUTTON_LEFT)
-	var right := Input.is_mouse_button_pressed(MOUSE_BUTTON_RIGHT)
+	var left := Input.is_mouse_button_pressed(MouseButton.MOUSE_BUTTON_LEFT)
+	var right := Input.is_mouse_button_pressed(MouseButton.MOUSE_BUTTON_RIGHT)
 	if left and not _prev_left_pressed:
 		_set_mode((current_mode + 1) % MODE_COUNT)
 	elif right and not _prev_right_pressed:

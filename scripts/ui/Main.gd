@@ -20,7 +20,13 @@ func _ready() -> void:
 	await get_tree().process_frame
 
 	_player = get_tree().get_first_node_in_group("player")
-	_mp35   = get_tree().get_first_node_in_group("mp35")
+	if _player == null and level:
+		_player = level.get_node_or_null("Player")
+
+	_mp35 = get_tree().get_first_node_in_group("mp35")
+	if _mp35 == null and _player:
+		_mp35 = _player.get_node_or_null("GunPivot/MP35")
+
 	_vats   = get_tree().get_nodes_in_group("vats")
 
 	if hud and _player and _mp35:

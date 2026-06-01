@@ -10,7 +10,6 @@ enum AmmoMode { BULLET, GRENADE, BEAM }
 const MODE_NAMES := ["BULLET", "GRENADE", "BEAM"]
 const MODE_COUNT := 3
 
-# Mode indicator light colours (matches projectile palettes)
 const MODE_COLORS := [
 	Color(1.0, 0.98, 0.5, 1),   # BULLET — yellow-white
 	Color(1.0, 0.45, 0.08, 1),  # GRENADE — orange
@@ -21,20 +20,21 @@ const MODE_COLORS := [
 @export var grenade_scene: PackedScene
 @export var beam_scene:    PackedScene
 
-# Bullet mode
 const BULLET_COOLDOWN := 0.10
 const BULLET_DAMAGE   := 12
 const BULLET_SPEED    := 800.0
 
-# Grenade mode
 const GRENADE_COOLDOWN := 0.60
 const GRENADE_DAMAGE   := 80
 const GRENADE_SPEED    := 280.0
 const GRENADE_RADIUS   := 96.0
 
-# Beam mode
 const BEAM_TICK_DAMAGE := 4
-const BEAM_RANGE       := 900.0   # matches BeamProjectile scene RayCast2D target
+const BEAM_RANGE       := 900.0
+
+# Bullets/grenades spawn this far along the fire direction from the player centre.
+# Must be < player collision radius (12 px) so point-blank enemies are always hittable.
+const SPAWN_OFFSET := 8.0
 
 var current_mode: AmmoMode = AmmoMode.BULLET
 var last_mode:    AmmoMode = AmmoMode.GRENADE
@@ -108,10 +108,13 @@ func _fire_bullet() -> void:
 	if not bullet_scene:
 		return
 	_fire_cooldown = BULLET_COOLDOWN
-	var proj = bullet_scene.instantiate()
+	var fire_dir := Vector2.RIGHT.rotated(global_rotation)
+	var proj     = bullet_scene.instantiate()
 	get_tree().current_scene.add_child(proj)
-	proj.global_position = global_position
-	proj.direction       = Vector2.RIGHT.rotated(global_rotation)
+	# Spawn inside the player's collision shape so point-blank shots register.
+	proj.global_position = get_parent().get_parent().global_position + fire_dir * SPAWN_OFFSET
+	proj.direction       = fire_dir
+	proj.rotation        = fire_dir.angle()
 	proj.speed           = BULLET_SPEED
 	proj.damage          = BULLET_DAMAGE
 
@@ -120,10 +123,11 @@ func _fire_grenade() -> void:
 	if not grenade_scene:
 		return
 	_fire_cooldown = GRENADE_COOLDOWN
-	var proj = grenade_scene.instantiate()
+	var fire_dir := Vector2.RIGHT.rotated(global_rotation)
+	var proj     = grenade_scene.instantiate()
 	get_tree().current_scene.add_child(proj)
-	proj.global_position  = global_position
-	proj.direction        = Vector2.RIGHT.rotated(global_rotation)
+	proj.global_position  = get_parent().get_parent().global_position + fire_dir * SPAWN_OFFSET
+	proj.direction        = fire_dir
 	proj.speed            = GRENADE_SPEED
 	proj.damage           = GRENADE_DAMAGE
 	proj.explosion_radius = GRENADE_RADIUS

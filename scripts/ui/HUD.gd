@@ -2,79 +2,81 @@ extends CanvasLayer
 
 # ──────────────────────────────────────────────
 #  HUD.gd
-#  Health bar (top-left)
+#  Health bar (top-left) — percentage bar only, no text
 #  Ammo mode indicator (bottom-centre)
-#  Vat status row (top-right): green / red / ✕
+#  Vat status row (top-right): species-coloured → red (bloomed) → grey (dead)
 # ──────────────────────────────────────────────
 
-@onready var health_bar:      ProgressBar   = $TopLeft/HealthBar
-@onready var health_label:    Label         = $TopLeft/HealthLabel
-@onready var mode_label:      Label         = $BottomCentre/ModeLabel
-@onready var center_message:  Label         = $CenterMessage
-@onready var vat_status_row:  HBoxContainer = $TopRight/VatRow
+@onready var health_bar:     ProgressBar   = $TopLeft/HealthBar
+@onready var mode_label:     Label         = $BottomCentre/ModeLabel
+@onready var center_message: Label         = $CenterMessage
+@onready var vat_status_row: HBoxContainer = $TopRight/VatRow
 
-# Track signal connections for cleanup on exit
+# Species → active-state icon colour (matches enemy body palette)
+const SPECIES_COLORS := {
+	"consu_crawler": Color(0.18, 0.72, 0.55, 1),   # teal
+	"fnitu_drifter": Color(0.62, 0.72, 0.12, 1),   # bile-green
+	"rraey_brute":   Color(0.75, 0.12, 0.08, 1),   # blood-red
+	"obin_seer":     Color(0.55, 0.15, 0.90, 1),   # purple
+}
+const COL_BLOOMED  := Color(1.0, 0.20, 0.04, 1)
+const COL_DEAD     := Color(0.28, 0.28, 0.28, 1)
+
 var _connections: Array = []
 
-# Message queue so rapid bloom events don't overwrite each other
 var _message_queue: Array[String] = []
-var _message_busy: bool = false
+var _message_busy:  bool          = false
 
 
-# Called by Main when player and vats are ready
 func init(player: Node, mp35: Node, vats: Array) -> void:
-	# Player health
+	# Health bar
 	player.health_changed.connect(_on_health_changed)
 	_connections.append([player, "health_changed", Callable(self, "_on_health_changed")])
 	health_bar.max_value = player.max_health
 	health_bar.value     = player.health
-	_update_health_label(player.health, player.max_health)
 
 	# Ammo mode
 	mp35.mode_changed.connect(_on_mode_changed)
 	_connections.append([mp35, "mode_changed", Callable(self, "_on_mode_changed")])
 	_on_mode_changed("BULLET")
 
-	# Vat status icons
+	# Vat status icons — one per vat, coloured by species
 	for child in vat_status_row.get_children():
 		child.queue_free()
+
 	for vat in vats:
-		var icon := ColorRect.new()
+		var sid   := vat.species_id as String
+		var icon  := ColorRect.new()
 		icon.custom_minimum_size = Vector2(20, 20)
-		icon.color = Color(0.1, 0.9, 0.1)   # green = active
+		icon.color = SPECIES_COLORS.get(sid, Color(0.3, 0.8, 0.4, 1))
 		vat_status_row.add_child(icon)
 
-		var dead_callback := Callable(self, "_mark_vat_dead").bindv([icon])
-		vat.connect("vat_destroyed_signal", dead_callback)
-		_connections.append([vat, "vat_destroyed_signal", dead_callback])
+		var dead_cb  := Callable(self, "_mark_vat_dead").bind(icon)
+		var bloom_icon_cb := Callable(self, "_mark_vat_bloomed").bind(icon)
+		var bloom_msg_cb  := Callable(self, "_on_vat_bloomed").bind(vat)
 
-		var bloom_icon_callback := Callable(self, "_mark_vat_bloomed").bindv([icon])
-		vat.connect("vat_bloomed", bloom_icon_callback)
-		_connections.append([vat, "vat_bloomed", bloom_icon_callback])
+		vat.connect("vat_destroyed_signal", dead_cb)
+		vat.connect("vat_bloomed",          bloom_icon_cb)
+		vat.connect("vat_bloomed",          bloom_msg_cb)
 
-		var bloom_msg_callback := Callable(self, "_on_vat_bloomed").bindv([vat])
-		vat.connect("vat_bloomed", bloom_msg_callback)
-		_connections.append([vat, "vat_bloomed", bloom_msg_callback])
+		_connections.append([vat, "vat_destroyed_signal", dead_cb])
+		_connections.append([vat, "vat_bloomed",          bloom_icon_cb])
+		_connections.append([vat, "vat_bloomed",          bloom_msg_cb])
 
 
 func _exit_tree() -> void:
-	for conn_info in _connections:
-		var obj      = conn_info[0]
-		var sig_name = conn_info[1]
-		var callable = conn_info[2]
-		if is_instance_valid(obj) and obj.is_connected(sig_name, callable):
-			obj.disconnect(sig_name, callable)
+	for conn in _connections:
+		var obj:      Node     = conn[0]
+		var sig:      String   = conn[1]
+		var callable: Callable = conn[2]
+		if is_instance_valid(obj) and obj.is_connected(sig, callable):
+			obj.disconnect(sig, callable)
 	_connections.clear()
 
 
 func _on_health_changed(current: int, maximum: int) -> void:
-	health_bar.value = current
-	_update_health_label(current, maximum)
-
-
-func _update_health_label(cur: int, max_val: int) -> void:
-	if health_label:
-		health_label.text = "%d / %d" % [cur, max_val]
+	health_bar.max_value = maximum
+	health_bar.value     = current
 
 
 func _on_mode_changed(mode_name: String) -> void:
@@ -83,7 +85,6 @@ func _on_mode_changed(mode_name: String) -> void:
 
 
 func _on_vat_bloomed(species_id: String, vat: Node) -> void:
-	# Ask the vat itself for the display name so the mapping lives in one place
 	var display: String = species_id.to_upper()
 	if is_instance_valid(vat) and vat.has_method("get_display_name"):
 		display = vat.get_display_name()
@@ -91,14 +92,14 @@ func _on_vat_bloomed(species_id: String, vat: Node) -> void:
 
 
 func _mark_vat_dead(_species_id: String, icon: ColorRect) -> void:
-	icon.color = Color(0.3, 0.3, 0.3)   # grey = destroyed
+	icon.color = COL_DEAD
 
 
 func _mark_vat_bloomed(_species_id: String, icon: ColorRect) -> void:
-	icon.color = Color(0.9, 0.1, 0.1)   # red = bloomed
+	icon.color = COL_BLOOMED
 
 
-# ── Message queue ──────────────────────────────
+# ── Message queue ───────────────────────────────
 
 func _queue_message(msg: String) -> void:
 	_message_queue.append(msg)
@@ -111,15 +112,14 @@ func _pump_message_queue() -> void:
 		_message_busy = false
 		return
 	_message_busy = true
-	var msg := _message_queue.pop_front() as String
-	_show_message(msg)
+	_show_message(_message_queue.pop_front())
 
 
 func _show_message(msg: String) -> void:
 	if center_message == null:
 		_pump_message_queue()
 		return
-	center_message.text = msg
+	center_message.text    = msg
 	center_message.visible = true
 	await get_tree().create_timer(2.5).timeout
 	if center_message:

@@ -23,6 +23,7 @@ config/icon="res://icon.svg"
 [autoload]
 
 GameState="*res://scripts/autoload/GameState.gd"
+Audio="*res://scripts/autoload/Audio.gd"
 
 [display]
 

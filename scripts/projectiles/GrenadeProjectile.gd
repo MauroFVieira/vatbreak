@@ -15,7 +15,7 @@ var explosion_radius: float = 96.0
 const ARM_DISTANCE := 80.0
 const MAX_RANGE    := 560.0
 
-var can_explode: bool         = false
+var can_explode: bool          = false
 var _distance_travelled: float = 0.0
 
 
@@ -61,6 +61,7 @@ func _explode() -> void:
 	var results := space.intersect_shape(query, 32)
 
 	_draw_explosion(true)
+	Audio.play_explosion()
 
 	for r in results:
 		var col = _resolve_damage_target(r["collider"])

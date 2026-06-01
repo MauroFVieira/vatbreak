@@ -9,6 +9,7 @@ radius = 12.0
 [node name="Player" type="CharacterBody2D" unique_id=913532573]
 collision_mask = 6
 script = ExtResource("1_player")
+max_health = null
 
 [node name="BootL" type="Polygon2D" parent="." unique_id=896865456]
 color = Color(0.12, 0.28, 0.18, 1)

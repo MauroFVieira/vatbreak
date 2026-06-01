@@ -20,9 +20,9 @@ const MODE_COLORS := [
 @export var grenade_scene: PackedScene
 @export var beam_scene:    PackedScene
 
-const BULLET_COOLDOWN := 0.10
-const BULLET_DAMAGE   := 12
-const BULLET_SPEED    := 800.0
+const BULLET_COOLDOWN  := 0.10
+const BULLET_DAMAGE    := 12
+const BULLET_SPEED     := 800.0
 
 const GRENADE_COOLDOWN := 0.60
 const GRENADE_DAMAGE   := 80
@@ -117,6 +117,7 @@ func _fire_bullet() -> void:
 	proj.rotation        = fire_dir.angle()
 	proj.speed           = BULLET_SPEED
 	proj.damage          = BULLET_DAMAGE
+	Audio.play_bullet()
 
 
 func _fire_grenade() -> void:
@@ -131,6 +132,7 @@ func _fire_grenade() -> void:
 	proj.speed            = GRENADE_SPEED
 	proj.damage           = GRENADE_DAMAGE
 	proj.explosion_radius = GRENADE_RADIUS
+	Audio.play_grenade()
 
 
 func _start_beam() -> void:
@@ -139,9 +141,11 @@ func _start_beam() -> void:
 		add_child(_beam_instance)
 		_beam_instance.tick_damage = BEAM_TICK_DAMAGE
 		_beam_instance.beam_range  = BEAM_RANGE
+		Audio.start_beam()
 
 
 func _stop_beam() -> void:
 	if _beam_instance != null:
 		_beam_instance.queue_free()
 		_beam_instance = null
+		Audio.stop_beam()

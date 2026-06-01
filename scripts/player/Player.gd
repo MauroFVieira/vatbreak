@@ -13,11 +13,10 @@ var dead: bool = false
 var _speed_multiplier: float = 1.0
 var _slow_timer: float = 0.0
 
-# VFX state
-var _polygons: Array      = []
-var _poly_colors: Array   = []
-var _colors_cached: bool  = false
-var _hurt_active: bool    = false
+var _polygons: Array     = []
+var _poly_colors: Array  = []
+var _colors_cached: bool = false
+var _hurt_active: bool   = false
 
 @onready var gun_pivot: Node2D = $GunPivot
 
@@ -36,6 +35,8 @@ func _physics_process(delta: float) -> void:
 	_handle_movement()
 	_handle_aim()
 	move_and_slide()
+	# Tell Audio whether the player is moving so footsteps tick correctly
+	Audio.set_player_moving(velocity.length_squared() > 100.0)
 
 
 func _handle_movement() -> void:
@@ -68,6 +69,7 @@ func take_damage(amount: int) -> void:
 func die() -> void:
 	dead = true
 	set_physics_process(false)
+	Audio.set_player_moving(false)
 	_play_death_vfx()
 	GameState.on_player_died()
 
@@ -139,10 +141,10 @@ func _play_death_vfx() -> void:
 			Vector2(-size * 0.6, size * 0.5),
 		])
 		var shard := Polygon2D.new()
-		shard.polygon        = pts
-		shard.color          = col
+		shard.polygon         = pts
+		shard.color           = col
 		shard.global_position = global_position
-		shard.rotation       = angle
+		shard.rotation        = angle
 		parent.add_child(shard)
 
 		var dir := Vector2(cos(angle), sin(angle))

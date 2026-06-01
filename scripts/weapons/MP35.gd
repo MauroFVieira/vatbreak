@@ -10,12 +10,19 @@ enum AmmoMode { BULLET, GRENADE, BEAM }
 const MODE_NAMES := ["BULLET", "GRENADE", "BEAM"]
 const MODE_COUNT := 3
 
-@export var bullet_scene: PackedScene
+# Mode indicator light colours (matches projectile palettes)
+const MODE_COLORS := [
+	Color(1.0, 0.98, 0.5, 1),   # BULLET — yellow-white
+	Color(1.0, 0.45, 0.08, 1),  # GRENADE — orange
+	Color(0.35, 0.88, 1.0, 1),  # BEAM — cyan
+]
+
+@export var bullet_scene:  PackedScene
 @export var grenade_scene: PackedScene
-@export var beam_scene: PackedScene   # instantiated once, parented to scene tree
+@export var beam_scene:    PackedScene
 
 # Bullet mode
-const BULLET_COOLDOWN := 0.10   # seconds between shots
+const BULLET_COOLDOWN := 0.10
 const BULLET_DAMAGE   := 12
 const BULLET_SPEED    := 800.0
 
@@ -25,23 +32,26 @@ const GRENADE_DAMAGE   := 80
 const GRENADE_SPEED    := 280.0
 const GRENADE_RADIUS   := 96.0
 
-# Beam mode — handled by BeamProjectile child
-const BEAM_TICK_DAMAGE := 4      # per 0.1 s tick
-const BEAM_RANGE       := 500.0
+# Beam mode
+const BEAM_TICK_DAMAGE := 4
+const BEAM_RANGE       := 900.0   # matches BeamProjectile scene RayCast2D target
 
 var current_mode: AmmoMode = AmmoMode.BULLET
 var last_mode:    AmmoMode = AmmoMode.GRENADE
 
-var _fire_cooldown: float = 0.0
-var _beam_instance = null   # active beam node
-var _prev_left_pressed: bool = false
+var _fire_cooldown: float     = 0.0
+var _beam_instance            = null
+var _prev_left_pressed: bool  = false
 var _prev_right_pressed: bool = false
+
+@onready var mode_light: Polygon2D = $ModeLight
 
 signal mode_changed(mode_name: String)
 
 
 func _ready() -> void:
 	emit_signal("mode_changed", MODE_NAMES[current_mode])
+	_update_mode_light()
 
 
 func _process(delta: float) -> void:
@@ -51,29 +61,33 @@ func _process(delta: float) -> void:
 
 
 func _handle_mode_switch() -> void:
-	# Left / right mouse buttons cycle weapon modes (opposite directions).
-	var left := Input.is_mouse_button_pressed(MouseButton.MOUSE_BUTTON_LEFT)
+	var left  := Input.is_mouse_button_pressed(MouseButton.MOUSE_BUTTON_LEFT)
 	var right := Input.is_mouse_button_pressed(MouseButton.MOUSE_BUTTON_RIGHT)
 	if left and not _prev_left_pressed:
 		_set_mode((current_mode + 1) % MODE_COUNT)
 	elif right and not _prev_right_pressed:
 		_set_mode((current_mode - 1 + MODE_COUNT) % MODE_COUNT)
-	# quick_swap still supported via action if present
 	elif Input.is_action_just_pressed("quick_swap"):
 		var tmp := current_mode
 		_set_mode(last_mode)
 		last_mode = tmp
-	_prev_left_pressed = left
+	_prev_left_pressed  = left
 	_prev_right_pressed = right
 
 
 func _set_mode(new_mode: int) -> void:
 	if new_mode == current_mode:
 		return
-	last_mode = current_mode
+	last_mode    = current_mode
 	current_mode = new_mode as AmmoMode
 	_stop_beam()
 	emit_signal("mode_changed", MODE_NAMES[current_mode])
+	_update_mode_light()
+
+
+func _update_mode_light() -> void:
+	if mode_light:
+		mode_light.color = MODE_COLORS[current_mode]
 
 
 func _handle_fire() -> void:
@@ -97,9 +111,9 @@ func _fire_bullet() -> void:
 	var proj = bullet_scene.instantiate()
 	get_tree().current_scene.add_child(proj)
 	proj.global_position = global_position
-	proj.direction = Vector2.RIGHT.rotated(global_rotation)
-	proj.speed = BULLET_SPEED
-	proj.damage = BULLET_DAMAGE
+	proj.direction       = Vector2.RIGHT.rotated(global_rotation)
+	proj.speed           = BULLET_SPEED
+	proj.damage          = BULLET_DAMAGE
 
 
 func _fire_grenade() -> void:
@@ -108,10 +122,10 @@ func _fire_grenade() -> void:
 	_fire_cooldown = GRENADE_COOLDOWN
 	var proj = grenade_scene.instantiate()
 	get_tree().current_scene.add_child(proj)
-	proj.global_position = global_position
-	proj.direction = Vector2.RIGHT.rotated(global_rotation)
-	proj.speed = GRENADE_SPEED
-	proj.damage = GRENADE_DAMAGE
+	proj.global_position  = global_position
+	proj.direction        = Vector2.RIGHT.rotated(global_rotation)
+	proj.speed            = GRENADE_SPEED
+	proj.damage           = GRENADE_DAMAGE
 	proj.explosion_radius = GRENADE_RADIUS
 
 

@@ -6,12 +6,20 @@
 script = ExtResource("1_beam")
 
 [node name="RayCast2D" type="RayCast2D" parent="."]
-target_position = Vector2(500, 0)
+target_position = Vector2(900, 0)
 collision_mask = 6
 
+[node name="GlowLine" type="Line2D" parent="."]
+default_color = Color(0.15, 0.65, 1.0, 0.35)
+width = 10.0
+begin_cap_mode = 1
+end_cap_mode = 1
+
 [node name="Line2D" type="Line2D" parent="."]
-default_color = Color(0.3, 0.8, 1.0, 0.85)
-width = 3.0
+default_color = Color(0.55, 0.92, 1.0, 0.92)
+width = 2.5
+begin_cap_mode = 1
+end_cap_mode = 1
 
 [node name="TickTimer" type="Timer" parent="."]
 wait_time = 0.1

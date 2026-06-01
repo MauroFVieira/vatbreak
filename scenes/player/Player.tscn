@@ -1,7 +1,6 @@
 [gd_scene format=3 uid="uid://player"]
 
 [ext_resource type="Script" uid="uid://cin85lqsp78wf" path="res://scripts/player/Player.gd" id="1_player"]
-[ext_resource type="Texture2D" uid="uid://c2wqxf7p6k3tp" path="res://sprites/playerGreen_stand.png" id="2_4kuee"]
 [ext_resource type="PackedScene" uid="uid://mp35" path="res://scenes/weapons/MP35.tscn" id="2_mp35"]
 
 [sub_resource type="CircleShape2D" id="CircleShape2D_1"]
@@ -11,10 +10,33 @@ radius = 12.0
 collision_mask = 6
 script = ExtResource("1_player")
 
-[node name="Sprite2D" type="Sprite2D" parent="." unique_id=896865460]
-modulate = Color(0.2, 1, 0.4, 1)
-scale = Vector2(0.7, 0.7)
-texture = ExtResource("2_4kuee")
+[node name="BootL" type="Polygon2D" parent="." unique_id=896865456]
+color = Color(0.12, 0.28, 0.18, 1)
+polygon = PackedVector2Array(-12, 6, -4, 6, -4, 14, -12, 14)
+
+[node name="BootR" type="Polygon2D" parent="." unique_id=896865457]
+color = Color(0.12, 0.28, 0.18, 1)
+polygon = PackedVector2Array(4, 6, 12, 6, 12, 14, 4, 14)
+
+[node name="Body" type="Polygon2D" parent="." unique_id=896865458]
+color = Color(0.18, 0.48, 0.28, 1)
+polygon = PackedVector2Array(-10, -14, 0, -18, 10, -14, 14, -6, 14, 8, -14, 8, -14, -6)
+
+[node name="PauldronL" type="Polygon2D" parent="." unique_id=896865459]
+color = Color(0.14, 0.38, 0.22, 1)
+polygon = PackedVector2Array(-14, -10, -22, -8, -20, -2, -14, -2)
+
+[node name="PauldronR" type="Polygon2D" parent="." unique_id=896865460]
+color = Color(0.14, 0.38, 0.22, 1)
+polygon = PackedVector2Array(14, -10, 22, -8, 20, -2, 14, -2)
+
+[node name="Visor" type="Polygon2D" parent="." unique_id=896865461]
+color = Color(0.3, 0.95, 0.55, 1)
+polygon = PackedVector2Array(-8, -14, 8, -14, 8, -10, -8, -10)
+
+[node name="BeltStripe" type="Polygon2D" parent="." unique_id=896865462]
+color = Color(0.1, 0.32, 0.18, 1)
+polygon = PackedVector2Array(-14, 2, 14, 2, 14, 6, -14, 6)
 
 [node name="CollisionShape2D" type="CollisionShape2D" parent="." unique_id=968437198]
 shape = SubResource("CircleShape2D_1")

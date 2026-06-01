@@ -29,8 +29,8 @@ func _species_process(delta: float) -> void:
 	if _player_ref == null:
 		return
 
-	var dist       := global_position.distance_to(_player_ref.global_position)
-	var to_player  :Vector2= (_player_ref.global_position - global_position).normalized()
+	var dist       :        = global_position.distance_to(_player_ref.global_position)
+	var to_player  :Vector2 = (_player_ref.global_position - global_position).normalized()
 
 	if dist > PREFERRED_RANGE + 40.0:
 		velocity = to_player * move_speed

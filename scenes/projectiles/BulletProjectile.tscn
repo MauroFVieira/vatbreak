@@ -1,19 +1,22 @@
 [gd_scene format=3 uid="uid://svo5ffh23qi4"]
 
 [ext_resource type="Script" uid="uid://bogmcs1ro4t5f" path="res://scripts/projectiles/BulletProjectile.gd" id="1_bullet"]
-[ext_resource type="Texture2D" uid="uid://ti6b7oxps75x" path="res://sprites/bullet.png" id="2_tjwnw"]
 
 [sub_resource type="CircleShape2D" id="CircleShape2D_1"]
-radius = 4.0
+radius = 3.0
 
 [node name="BulletProjectile" type="Area2D" unique_id=201940886]
 collision_layer = 8
 collision_mask = 6
 script = ExtResource("1_bullet")
 
-[node name="Sprite2D" type="Sprite2D" parent="." unique_id=227712816]
-modulate = Color(1, 0.95, 0.3, 1)
-texture = ExtResource("2_tjwnw")
+[node name="Trail" type="Polygon2D" parent="." unique_id=227712814]
+color = Color(1.0, 0.95, 0.45, 0.35)
+polygon = PackedVector2Array(-10, -2, -2, -2, -2, 2, -10, 2)
+
+[node name="Head" type="Polygon2D" parent="." unique_id=227712815]
+color = Color(1.0, 0.98, 0.7, 1)
+polygon = PackedVector2Array(-3, 0, 0, -3, 6, 0, 0, 3)
 
 [node name="CollisionShape2D" type="CollisionShape2D" parent="." unique_id=1659549862]
 shape = SubResource("CircleShape2D_1")

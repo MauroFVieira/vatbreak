@@ -2,16 +2,19 @@ extends Area2D
 
 # ──────────────────────────────────────────────
 #  GrenadeProjectile.gd
-#  Slow arc; won't explode until armed (~80 px).
-#  On impact, deals AOE damage in explosion_radius.
+#  Slow projectile; won't explode until armed (~80 px).
+#  Self-destructs (no explosion) if it exceeds MAX_RANGE
+#  without hitting anything — prevents indefinite travel.
 # ──────────────────────────────────────────────
 
-var direction: Vector2 = Vector2.RIGHT
-var speed: float = 280.0
-var damage: int = 80
+var direction: Vector2    = Vector2.RIGHT
+var speed: float          = 280.0
+var damage: int           = 80
 var explosion_radius: float = 96.0
 
 const ARM_DISTANCE := 80.0
+const MAX_RANGE    := 560.0    # fizzles out beyond this
+
 var can_explode: bool = false
 var _distance_travelled: float = 0.0
 
@@ -24,8 +27,16 @@ func _physics_process(delta: float) -> void:
 	var move := direction * speed * delta
 	position += move
 	_distance_travelled += move.length()
+
+	# Tumble in flight for visual interest
+	rotation += delta * 3.5
+
 	if not can_explode and _distance_travelled >= ARM_DISTANCE:
 		can_explode = true
+
+	# Range cap: fizzle without explosion
+	if _distance_travelled >= MAX_RANGE:
+		_fizzle()
 
 
 func _on_body_entered(_body: Node) -> void:
@@ -35,47 +46,72 @@ func _on_body_entered(_body: Node) -> void:
 
 
 func _explode() -> void:
-	# AOE: find all bodies in radius and damage them
 	var space := get_world_2d().direct_space_state
 	var query := PhysicsShapeQueryParameters2D.new()
 	var shape := CircleShape2D.new()
 	shape.radius = explosion_radius
-	query.shape = shape
+	query.shape     = shape
 	query.transform = Transform2D(0.0, global_position)
-	query.collision_mask = 0b110  # enemies + vats
+	query.collision_mask = 0b110
 	var results := space.intersect_shape(query, 32)
-	# Draw explosion graphic
-	_draw_explosion()
+
+	_draw_explosion(true)
+
 	for r in results:
 		var col = _resolve_damage_target(r["collider"])
-		if col != null and col.has_method("take_damage"):
-			# Pass damage type for vat resistance calculation
-			if col.has_method("take_damage") and col.get_script() and col.get_script().resource_path.contains("Vat"):
-				col.take_damage(damage, "grenade")
-			else:
-				col.take_damage(damage)
-	# TODO: spawn explosion VFX here
+		if col == null or not col.has_method("take_damage"):
+			continue
+		if col.get_script() and col.get_script().resource_path.contains("Vat"):
+			col.take_damage(damage, "grenade")
+		else:
+			col.take_damage(damage)
+
 	call_deferred("queue_free")
 
 
-func _draw_explosion() -> void:
-	# Draw a simple polygon explosion circle
-	var polygon = Polygon2D.new()
-	polygon.z_index = 5
-	polygon.color = Color(1.0, 0.6, 0.0, 0.8)   # orange-yellow
-	# Create circle points
-	var points: PackedVector2Array = []
-	var segments := 8
-	for i in range(segments):
-		var angle := (i / float(segments)) * TAU
-		points.append(Vector2(cos(angle), sin(angle)) * explosion_radius)
-	polygon.polygon = points
-	polygon.global_position = global_position
-	get_parent().add_child(polygon)
-	# Fade out the explosion
-	var tween := polygon.create_tween()
-	tween.tween_property(polygon, "color:a", 0.0, 0.3)
-	tween.tween_callback(polygon.queue_free)
+func _fizzle() -> void:
+	# Small puff — no damage
+	_draw_explosion(false)
+	call_deferred("queue_free")
+
+
+func _draw_explosion(full: bool) -> void:
+	var radius    := explosion_radius if full else explosion_radius * 0.3
+	var col_inner := Color(1.0, 0.88, 0.3, 0.9)  if full else Color(0.6, 0.6, 0.55, 0.5)
+	var col_outer := Color(1.0, 0.45, 0.05, 0.7) if full else Color(0.4, 0.4, 0.38, 0.3)
+
+	# Outer ring
+	var outer := Polygon2D.new()
+	outer.z_index = 5
+	outer.color   = col_outer
+	var pts_outer := PackedVector2Array()
+	for i in 12:
+		var a := (i / 12.0) * TAU
+		pts_outer.append(Vector2(cos(a), sin(a)) * radius)
+	outer.polygon        = pts_outer
+	outer.global_position = global_position
+	get_parent().add_child(outer)
+
+	# Inner bright core
+	var inner := Polygon2D.new()
+	inner.z_index = 6
+	inner.color   = col_inner
+	var pts_inner := PackedVector2Array()
+	for i in 10:
+		var a := (i / 10.0) * TAU
+		pts_inner.append(Vector2(cos(a), sin(a)) * radius * 0.45)
+	inner.polygon        = pts_inner
+	inner.global_position = global_position
+	get_parent().add_child(inner)
+
+	var tw := outer.create_tween().set_parallel(true)
+	tw.tween_property(outer, "scale", Vector2(1.3, 1.3), 0.28).set_trans(Tween.TRANS_QUAD).set_ease(Tween.EASE_OUT)
+	tw.tween_property(outer, "color:a", 0.0, 0.28)
+	tw.tween_property(inner, "color:a", 0.0, 0.18).set_delay(0.06)
+	tw.tween_property(inner, "scale", Vector2(0.5, 0.5), 0.24)
+	tw.chain().tween_callback(outer.queue_free)
+	tw.chain().tween_callback(inner.queue_free)
+
 
 func _resolve_damage_target(target: Node) -> Node:
 	if target == null:

@@ -1,20 +1,26 @@
 [gd_scene format=3 uid="uid://b0aw6wrquwfpa"]
 
 [ext_resource type="Script" uid="uid://balacqc7a46i5" path="res://scripts/projectiles/GrenadeProjectile.gd" id="1_grenade"]
-[ext_resource type="Texture2D" uid="uid://bs525snosiayr" path="res://sprites/grenade.png" id="2_jc2fc"]
 
 [sub_resource type="CircleShape2D" id="CircleShape2D_1"]
-radius = 8.0
+radius = 7.0
 
 [node name="GrenadeProjectile" type="Area2D" unique_id=911216235]
 collision_layer = 8
 collision_mask = 6
 script = ExtResource("1_grenade")
 
-[node name="Sprite2D" type="Sprite2D" parent="." unique_id=127255858]
-modulate = Color(1, 0.5, 0.1, 1)
-scale = Vector2(1.6, 1.6)
-texture = ExtResource("2_jc2fc")
+[node name="Body" type="Polygon2D" parent="." unique_id=127255856]
+color = Color(0.72, 0.38, 0.08, 1)
+polygon = PackedVector2Array(-6, -8, 6, -8, 9, -4, 9, 4, 6, 8, -6, 8, -9, 4, -9, -4)
+
+[node name="Band" type="Polygon2D" parent="." unique_id=127255857]
+color = Color(0.45, 0.22, 0.04, 1)
+polygon = PackedVector2Array(-9, -1, 9, -1, 9, 3, -9, 3)
+
+[node name="Pin" type="Polygon2D" parent="." unique_id=127255858]
+color = Color(0.8, 0.75, 0.3, 1)
+polygon = PackedVector2Array(-2, -10, 2, -10, 2, -7, -2, -7)
 
 [node name="CollisionShape2D" type="CollisionShape2D" parent="." unique_id=1967856473]
 shape = SubResource("CircleShape2D_1")

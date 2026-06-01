@@ -1,7 +1,6 @@
 [gd_scene format=3 uid="uid://cu1tq7kdu5w8g"]
 
 [ext_resource type="Script" uid="uid://b2fkq2nvi3rhh" path="res://scripts/projectiles/AcidGlobProjectile.gd" id="1_acid"]
-[ext_resource type="Texture2D" uid="uid://cotfm74xgj7cg" path="res://sprites/acidGlob.png" id="2_v8ax6"]
 
 [sub_resource type="CircleShape2D" id="CircleShape2D_1"]
 radius = 6.0
@@ -10,10 +9,17 @@ radius = 6.0
 collision_layer = 8
 script = ExtResource("1_acid")
 
-[node name="Sprite2D" type="Sprite2D" parent="." unique_id=520710552]
-modulate = Color(0.3, 0.9, 0.1, 0.9)
-scale = Vector2(1.2, 1.2)
-texture = ExtResource("2_v8ax6")
+[node name="BlobOuter" type="Polygon2D" parent="." unique_id=520710550]
+color = Color(0.28, 0.72, 0.08, 0.75)
+polygon = PackedVector2Array(-7, -4, -3, -9, 4, -8, 9, -2, 8, 5, 2, 9, -5, 7, -9, 1)
+
+[node name="BlobInner" type="Polygon2D" parent="." unique_id=520710551]
+color = Color(0.55, 0.92, 0.14, 0.9)
+polygon = PackedVector2Array(-4, -2, 0, -6, 5, -3, 5, 2, 1, 5, -4, 3)
+
+[node name="Droplet" type="Polygon2D" parent="." unique_id=520710552]
+color = Color(0.4, 0.85, 0.1, 0.8)
+polygon = PackedVector2Array(-2, 6, 2, 6, 1, 11, -1, 11)
 
 [node name="CollisionShape2D" type="CollisionShape2D" parent="." unique_id=1834746981]
 shape = SubResource("CircleShape2D_1")

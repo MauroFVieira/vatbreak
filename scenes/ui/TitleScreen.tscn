@@ -73,7 +73,7 @@ layout_mode = 2
 layout_mode = 2
 theme_override_colors/font_color = Color(0.5, 0.6, 0.55, 1)
 theme_override_font_sizes/font_size = 12
-text = "WASD — Move     Mouse — Aim     LMB / Scroll / MMB — Switch Weapon Mode"
+text = "WASD — Move     Mouse — Aim     LMB / RMB — Switch Weapon Mode"
 horizontal_alignment = 1
 
 [node name="Spacer3" type="Control" parent="VBoxContainer" unique_id=1046244755]

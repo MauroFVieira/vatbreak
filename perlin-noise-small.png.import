@@ -2,16 +2,16 @@
 
 importer="texture"
 type="CompressedTexture2D"
-uid="uid://i0vn8n3y5qcu"
-path="res://.godot/imported/playerRed_stand.png-7527926f92213c57679259c8af36b905.ctex"
+uid="uid://drb4eptkyi0w5"
+path="res://.godot/imported/perlin-noise-small.png-a78547e69e9036d7ae026f76d44ad5ff.ctex"
 metadata={
 "vram_texture": false
 }
 
 [deps]
 
-source_file="res://sprites/playerRed_stand.png"
-dest_files=["res://.godot/imported/playerRed_stand.png-7527926f92213c57679259c8af36b905.ctex"]
+source_file="res://perlin-noise-small.png"
+dest_files=["res://.godot/imported/perlin-noise-small.png-a78547e69e9036d7ae026f76d44ad5ff.ctex"]
 
 [params]
 

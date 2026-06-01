@@ -35,7 +35,7 @@ Enclosures are named after alien species and factions from John Scalzi's *Old Ma
 | Genre #157 | It's a Zoo! | The entire game is set inside a single futuristic alien zoo facility. The breached enclosure layout drives the map structure and the narrative premise. |
 | Art #84 | Include references to the works of a science fiction author of your choice. | Enclosures, alien species, weapons tech, and flavour text all reference John Scalzi's *Old Man's War* universe — the MP-35 descends from CDF adaptive weapon technology; enclosures are named after Scalzi alien species. |
 | Tech #132 | Catastrophic overflow: Chaos ensues as the capacity of some container is exceeded. | Breeding vats are literal containers. Their overflow is the inciting catastrophe and the core gameplay trigger — the entire starting state of the map (aliens everywhere) is the direct consequence of the vats overflowing. |
-| Bonus Rule | Something important must change over time in a way the player can notice and interact with. | The **Vat Bloom System**: unattended vats advance to a second stage with a visible color change, doubling their spawn rate. Destroying a vat of a given species permanently stops that species from spawning. Both changes are visible and alter how the player moves through the map. |
+| Bonus Rule | [Something important must change over time in a way the player can notice and interact with.](https://chatgpt.com/share/6a1d5ce4-ca68-83e9-b75b-b5de21ad98b5) | The **Vat Bloom System**: unattended vats advance to a second stage with a visible color change, doubling their spawn rate. Destroying a vat of a given species permanently stops that species from spawning. Both changes are visible and alter how the player moves through the map. |
 
 ---
 
@@ -57,11 +57,9 @@ Destroying a vat immediately stops that species from spawning. The map progressi
 
 | Action | Input |
 |---|---|
-| Move | WASD / Left stick |
-| Aim | Mouse cursor / Right stick |
-| Fire | Left mouse button / Right trigger |
-| Cycle ammo mode | Scroll wheel / Bumpers |
-| Quick-swap to last mode | Middle mouse / Left bumper |
+| Move | WASD |
+| Aim | Mouse cursor |
+| Cycle ammo mode | Left mouse button / Right mouse button |
 
 ### 4.3 The MP-35 "Empee" Nano-Rifle
 
@@ -70,8 +68,8 @@ A CDF-lineage weapon issued to ZooCorps containment teams. The nano-cells in the
 | Mode | Behaviour |
 |---|---|
 | **BULLET** | High fire rate, single-target, low per-shot damage. Best against individual tough enemies and precise targeting of vat weakpoints. |
-| **GRENADE** | Slow projectile, large AOE explosion on impact. High burst damage. Has an arming distance — won't explode at point-blank range. Best against dense clusters and vat shields. |
-| **BEAM** | Continuous hitscan ray, very low damage per tick but applies Nano-Burn DoT that stacks. Best against slow tank enemies and softening vat health over time. |
+| **GRENADE** | Slow projectile, large AOE explosion on impact. High burst damage. Has an arming distance — won't explode at point-blank range. Best against dense clusters. |
+| **BEAM** | Continuous hitscan ray, very low damage per tick but applies Nano-Burn DoT. Best against slow tank enemies and softening vat health over time. |
 
 ### 4.4 The Vat Bloom System
 
@@ -106,9 +104,8 @@ One large map. Three breached enclosures are distributed across it, each semi-op
 |---|---|---|---|
 | A | **Consu Wing** | Consu Crawler vat | Closest to spawn, most open approach |
 | B | **Rraey Terrarium** | Rraey Brute vat | Mid-map, tighter corridors nearby |
-| C | **Obin Habitat** | Obin Seer vat | Farthest from spawn, hardest to reach |
-
-The Fnitu Drifter vat can be placed as a fourth enclosure if time allows, or Drifters can be removed from the roster to keep scope tight.
+| C | **Fnitu Reserve** | Fnitu Drifter vat | Far from spawn, enclosed space |
+| D | **Obin Habitat** | Obin Seer vat | Farthest from spawn, hardest to reach |
 
 ---
 

@@ -7,6 +7,7 @@
 [ext_resource type="PackedScene" uid="uid://canq6y3666s0d" path="res://scenes/enemies/RraeyBrute.tscn" id="05_rraey"]
 [ext_resource type="PackedScene" uid="uid://vk5lgup2ccoi" path="res://scenes/enemies/ObinSeer.tscn" id="06_obin"]
 [ext_resource type="PackedScene" uid="uid://b0dy05jvmblps" path="res://scenes/enemies/FnituDrifter.tscn" id="07_fnitu"]
+[ext_resource type="Texture2D" uid="uid://drb4eptkyi0w5" path="res://perlin-noise-small.png" id="08_perlin"]
 
 [sub_resource type="RectangleShape2D" id="WallH"]
 size = Vector2(3840, 24)
@@ -40,6 +41,15 @@ offset_top = 36.0
 offset_right = 3804.0
 offset_bottom = 2124.0
 color = Color(0.34901962, 0.21176471, 0.09019608, 1)
+
+[node name="FloorTexture" type="TextureRect" parent="." unique_id=20010099]
+modulate = Color(0.18039216, 0.72156864, 0.54901963, 0.12156863)
+offset_left = 36.0
+offset_top = 36.0
+offset_right = 3804.0
+offset_bottom = 2124.0
+texture = ExtResource("08_perlin")
+stretch_mode = 1
 
 [node name="Walls" type="Node2D" parent="." unique_id=1251357419]
 
@@ -100,6 +110,15 @@ offset_right = 1020.0
 offset_bottom = 840.0
 color = Color(0.06, 0.14, 0.08, 1)
 
+[node name="FloorATexture" type="TextureRect" parent="EnclosureA" unique_id=20010100]
+modulate = Color(0.18039216, 0.72156864, 0.54901963, 0.12156863)
+offset_left = 120.0
+offset_top = 120.0
+offset_right = 1020.0
+offset_bottom = 840.0
+texture = ExtResource("08_perlin")
+stretch_mode = 1
+
 [node name="LabelA" type="Label" parent="EnclosureA" unique_id=2058451970]
 offset_left = 144.0
 offset_top = 132.0
@@ -150,6 +169,15 @@ offset_top = 720.0
 offset_right = 2370.0
 offset_bottom = 1440.0
 color = Color(0.12, 0.07, 0.06, 1)
+
+[node name="FloorBTexture" type="TextureRect" parent="EnclosureB" unique_id=20010101]
+modulate = Color(0.75, 0.12, 0.08, 0.12)
+offset_left = 1470.0
+offset_top = 720.0
+offset_right = 2370.0
+offset_bottom = 1440.0
+texture = ExtResource("08_perlin")
+stretch_mode = 1
 
 [node name="LabelB" type="Label" parent="EnclosureB" unique_id=1961935630]
 offset_left = 1494.0
@@ -203,6 +231,15 @@ offset_right = 3720.0
 offset_bottom = 960.0
 color = Color(0.07, 0.06, 0.14, 1)
 
+[node name="FloorCTexture" type="TextureRect" parent="EnclosureC" unique_id=20010102]
+modulate = Color(0.55, 0.15, 0.9, 0.12)
+offset_left = 2820.0
+offset_top = 120.0
+offset_right = 3720.0
+offset_bottom = 960.0
+texture = ExtResource("08_perlin")
+stretch_mode = 1
+
 [node name="LabelC" type="Label" parent="EnclosureC" unique_id=481745875]
 offset_left = 2844.0
 offset_top = 132.0
@@ -254,6 +291,15 @@ offset_top = 1440.0
 offset_right = 3720.0
 offset_bottom = 2100.0
 color = Color(0.06, 0.12, 0.07, 1)
+
+[node name="FloorDTexture" type="TextureRect" parent="EnclosureD" unique_id=20010103]
+modulate = Color(0.62, 0.72, 0.12, 0.12)
+offset_left = 2820.0
+offset_top = 1440.0
+offset_right = 3720.0
+offset_bottom = 2100.0
+texture = ExtResource("08_perlin")
+stretch_mode = 1
 
 [node name="LabelD" type="Label" parent="EnclosureD" unique_id=373310110]
 offset_left = 2844.0

@@ -74,13 +74,13 @@ func _splat(_body) -> void:
 		drop.global_position = pos + Vector2(cos(a), sin(a)) * d
 		drop.rotation        = a
 		parent.add_child(drop)
-		var tw := drop.create_tween()
-		tw.tween_property(drop, "color:a", 0.0, 0.5).set_delay(0.2)
-		tw.tween_callback(drop.queue_free)
+		var tw1 := drop.create_tween()
+		tw1.tween_property(drop, "color:a", 0.0, 0.5).set_delay(0.2)
+		tw1.tween_callback(drop.queue_free)
 
 	# Fade and free the pool
-	var tw := pool.create_tween()
-	tw.tween_property(pool, "color:a", 0.0, 0.6).set_delay(0.3)
-	tw.tween_callback(pool.queue_free)
+	var tw2 := pool.create_tween()
+	tw2.tween_property(pool, "color:a", 0.0, 0.6).set_delay(0.3)
+	tw2.tween_callback(pool.queue_free)
 
 	call_deferred("queue_free")
